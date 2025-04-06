@@ -1,0 +1,3 @@
+/mnt/c/all/pre job work/GQTEF/build/CMakeFiles/DeribitClient.dir
+/mnt/c/all/pre job work/GQTEF/build/CMakeFiles/edit_cache.dir
+/mnt/c/all/pre job work/GQTEF/build/CMakeFiles/rebuild_cache.dir
