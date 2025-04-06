@@ -94,17 +94,7 @@ void DeribitClient::init_logger() {
         std::cerr << " Logger initialization failed: " << ex.what() << std::endl;
     }
 }
-// void DeribitClient::init_logger() {
-//     try {
-//         logger_ = spdlog::rotating_logger_mt("file_logger", "logs/deribit.log", 20 * 1024 * 1024, 3);
-//         spdlog::set_default_logger(logger_);
-//         spdlog::set_level(spdlog::level::debug); // Change to info or warn in prod
-//         spdlog::flush_on(spdlog::level::err);    // Flush immediately on error
-//         spdlog::info(" Logger initialized successfully.");
-//     } catch (const spdlog::spdlog_ex& ex) {
-//         std::cerr << " Logger initialization failed: " << ex.what() << std::endl;
-//     }
-// }
+
 
 void DeribitClient::handle_error(const std::string& context, const std::exception& e) {
     std::string err_msg = fmt::format(" [{}] Error: {}", context, e.what());
@@ -142,17 +132,15 @@ void DeribitClient::process_messages() {
             
              message = receive_queue.front();
             receive_queue.pop();
-            // Process the message (you can call MessageParser::parse_and_print here)
-            // std::cout << "Processing received message: " << message << "\n";
+            
             
         }}
         if (!message.empty()) {
             spdlog::info("Processing received message: {}", message);
             try {
-                // Parse JSON, log, etc.
-                // spdlog::info("🔍 Processing message: {}", message);
+              
                 parser_.parse_and_print(message);
-                // Parse and handle as needed...
+               
             } catch (const std::exception& e) {
                 handle_error("Message Processing", e);
             }
@@ -162,43 +150,17 @@ void DeribitClient::process_messages() {
     }
 }
 
-// void DeribitClient::receive_loop() {
-//     try {
-//         beast::flat_buffer buffer;
-//         while (true) {
-//             ws_.read(buffer);
-//             std::lock_guard<std::mutex> lock(mtx_);
-//             // std::cout << "📩 " << beast::buffers_to_string(buffer.data()) << "\n";
-//              auto msg_str = beast::buffers_to_string(buffer.data());
-//              MessageParser::parse_and_print(msg_str);
 
-//             buffer.clear();
-//         }
-//     } catch (const std::exception& e) {
-//         std::cerr << " Receive Error: " << e.what() << "\n";
-//     }
-// }
 void DeribitClient::send_message(const json& msg) {
     std::string message = msg.dump();
     {
         std::lock_guard<std::mutex> lock(send_queue_mutex);
         send_queue.push(message);
-        // std::cout << "➡️ Added to send queue: " << message << "\n";
+
         spdlog::info("➡️ Added to send queue: {}", message);
     }
 }
-// void DeribitClient::send_message(const json& msg) {
-//      std::string message = msg.dump();
-//     {
-//         // Lock the send queue to safely push the message
-//         std::lock_guard<std::mutex> lock(send_queue_mutex);
-//         send_queue.push(message);
-//         std::cout << "➡️ Added to send queue: " << message << "\n";
-//     }
-//     // std::lock_guard<std::mutex> lock(mtx_);
-//     // ws_.write(boost::asio::buffer(msg.dump()));
-//     // std::cout << "➡️ Sent: " << msg.dump() << "\n";
-// }
+
 
 void DeribitClient::send_messages() {
     while (true) {
@@ -218,7 +180,7 @@ void DeribitClient::send_messages() {
 }
 
 void DeribitClient::close() {
-    // std::lock_guard<std::mutex> lock(mtx_);
+    
     try{
     std::lock_guard<std::mutex> lock(send_queue_mutex);
     ws_.close(websocket::close_code::normal);
@@ -259,25 +221,6 @@ void DeribitClient::send_auth(const std::string& api_key, const std::string& api
 
 
 
-// void DeribitClient::place_order(const std::string& instrument, double amount, double price) {
-//     json msg = {
-//         {"jsonrpc", "2.0"},
-//         {"id", ++msg_id_},
-//         {"method", "private/buy"},
-//         {"params", {
-//             {"instrument_name", instrument},
-//             {"amount", amount},
-//             {"type", "limit"},
-//             {"price", price},
-//             {"post_only", true}
-//         }}
-//     };
-
-//     std::lock_guard<std::mutex> lock(mtx_);
-//     ws_.write(boost::asio::buffer(msg.dump()));
-//     std::cout << "📝 Placed limit buy order: " << amount << " " << instrument << " @ $" << price << "\n";
-// }
-
 void DeribitClient::place_order(
      const std::string& instrument,
     std::optional<double> amount,
@@ -313,7 +256,6 @@ void DeribitClient::place_order(
 
     send_message(msg);
 
-    // std::cout << " Sent flexible order request for " << instrument << "\n";
     spdlog::info("Sent  order request for {}", instrument);
 
 }

@@ -60,17 +60,17 @@ int main() {
     ws.next_layer().handshake(ssl::stream_base::client);
     ws.handshake(host, target);
 
-    std::cout << "✅ Connected to Deribit WebSocket\n";
+    std::cout << " Connected to Deribit WebSocket\n";
 
     std::thread recv_thread(receive_messages, std::ref(ws));
 
     while (true) {
-        std::cout << "\n📟 MENU:\n"
+        std::cout << "\n MENU:\n"
                   << "1. Authenticate (private/login)\n"
                   << "2. Subscribe to BTC-PERPETUAL Order Book\n"
                   << "3. Place Limit Buy Order (testnet)\n"
                   << "0. Exit\n"
-                  << "👉 Choose an option: ";
+                  << " Choose an option: ";
 
         int choice;
         std::cin >> choice;

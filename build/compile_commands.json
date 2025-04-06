@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/mnt/c/all/pre job work/GQTEF/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DFMT_LOCALE -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I\"/mnt/c/all/pre job work/GQTEF/include\" -O3 -DNDEBUG -Wall -Wextra -std=gnu++17 -o CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o -c \"/mnt/c/all/pre job work/GQTEF/src/deribit_client.cpp\"",
+  "file": "/mnt/c/all/pre job work/GQTEF/src/deribit_client.cpp"
+},
+{
+  "directory": "/mnt/c/all/pre job work/GQTEF/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DFMT_LOCALE -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I\"/mnt/c/all/pre job work/GQTEF/include\" -O3 -DNDEBUG -Wall -Wextra -std=gnu++17 -o CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o -c \"/mnt/c/all/pre job work/GQTEF/src/message_parser.cpp\"",
+  "file": "/mnt/c/all/pre job work/GQTEF/src/message_parser.cpp"
+},
+{
+  "directory": "/mnt/c/all/pre job work/GQTEF/build",
+  "command": "/usr/bin/c++ -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DFMT_LOCALE -DFMT_SHARED -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_EXTERNAL -DSPDLOG_SHARED_LIB -I\"/mnt/c/all/pre job work/GQTEF/include\" -O3 -DNDEBUG -Wall -Wextra -std=gnu++17 -o CMakeFiles/DeribitClient.dir/main.cpp.o -c \"/mnt/c/all/pre job work/GQTEF/main.cpp\"",
+  "file": "/mnt/c/all/pre job work/GQTEF/main.cpp"
+}
+]
