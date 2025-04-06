@@ -1,12 +1,15 @@
-// message_parser.cpp
+/// @file message_parser.cpp
+/// @brief Implementation of the MessageParser class for handling Deribit API messages
+
 #include "message_parser.hpp"
 #include <iostream>
 #include <iomanip>
 
-
 using json = nlohmann::json;
 
+/// @brief Constructs MessageParser and initializes handler function map
 MessageParser::MessageParser() {
+    // Initialize message handlers map with lambda functions
     handlers_["auth"] = [this](const json& msg) { handle_auth(msg); };
     handlers_["order"] = [this](const json& msg) { handle_buy(msg); };
     handlers_["cancel"] = [this](const json& msg) { handle_cancel(msg); };
@@ -19,6 +22,9 @@ MessageParser::MessageParser() {
 
 }
 
+/// @brief Parses JSON message and routes to appropriate handler
+/// @details Extracts function name from message ID and calls corresponding handler
+/// @param raw_msg Raw JSON string from WebSocket
 void MessageParser::parse_and_print(const std::string& raw_msg) {
     try {
         auto msg = json::parse(raw_msg);
@@ -70,6 +76,9 @@ void MessageParser::parse_and_print(const std::string& raw_msg) {
     }
 }
 
+/// @brief Handles authentication response
+/// @details Processes successful auth and error responses
+/// @param msg JSON message containing auth result
 void MessageParser::handle_auth(const json&msg){
     std::cout << " Auth Response:\n";
     if (msg.contains("error")) {
@@ -83,6 +92,9 @@ void MessageParser::handle_auth(const json&msg){
     }
 }
 
+/// @brief Processes buy order response messages
+/// @details Extracts and displays order details including ID, amount, price
+/// @param msg JSON message containing order details
 void MessageParser::handle_buy(const json& msg) {
     fmt::print("Buy Order Response:\n");
 
@@ -113,6 +125,9 @@ void MessageParser::handle_buy(const json& msg) {
     fmt::print("Buy Order Handled Successfully.\n");
 }
 
+/// @brief Processes order cancellation responses
+/// @details Shows cancellation status and order details
+/// @param msg JSON message containing cancellation result
 void MessageParser::handle_cancel(const nlohmann::json& msg) {
     fmt::print("Cancel Order Response:\n");
 
@@ -143,6 +158,9 @@ void MessageParser::handle_cancel(const nlohmann::json& msg) {
     fmt::print("Last Update: {}\n", result.value("last_update_timestamp", 0));
 }
 
+/// @brief Handles bulk order cancellation response
+/// @details Shows number of orders cancelled
+/// @param msg JSON message with cancel_all result
 void MessageParser::handle_cancel_all(const json& msg) {
     if (msg.contains("error")) {
         fmt::print("Cancel All Error: {}\n", msg["error"].dump(2));
@@ -157,6 +175,9 @@ void MessageParser::handle_cancel_all(const json& msg) {
     }
 }
 
+/// @brief Processes orderbook data response
+/// @details Displays bids, asks, and market statistics
+/// @param msg JSON message containing orderbook data
 void MessageParser::handle_orderbook(const json& msg) {
     if (msg.contains("error")) {
         fmt::print("Orderbook Error: {}\n", msg["error"].dump(2));
@@ -216,6 +237,9 @@ void MessageParser::handle_orderbook(const json& msg) {
     }
 }
 
+/// @brief Processes position information response
+/// @details Shows position size, PNL, and margin details
+/// @param msg JSON message containing position data
 void MessageParser::handle_positions(const json& msg) {
     if (msg.contains("error")) {
         fmt::print("Positions Error: {}\n", msg["error"].dump(2));
@@ -254,6 +278,9 @@ void MessageParser::handle_positions(const json& msg) {
     fmt::print("Response of positions request printed\n");
 }
 
+/// @brief Handles subscription confirmation messages
+/// @details Shows successfully subscribed channels
+/// @param msg JSON message containing subscription result
 void MessageParser::handle_subscription(const json& msg) {
     fmt::print("Subscription Response:\n");
 
@@ -273,6 +300,9 @@ void MessageParser::handle_subscription(const json& msg) {
     }
 }
 
+/// @brief Processes unsubscribe response messages
+/// @details Confirms channel unsubscription
+/// @param msg JSON message containing unsubscribe result
 void MessageParser::handle_unsubscribe(const json& msg) {
     fmt::print("Unsubscription Response:\n");
 
@@ -292,6 +322,9 @@ void MessageParser::handle_unsubscribe(const json& msg) {
     }
 }
 
+/// @brief Handles order modification response
+/// @details Shows updated order parameters
+/// @param msg JSON message containing modified order details
 void MessageParser::handle_modify(const nlohmann::json& msg) {
     try {
         // Ensure the message contains a valid "result" object
@@ -327,6 +360,9 @@ void MessageParser::handle_modify(const nlohmann::json& msg) {
     }
 }
 
+/// @brief Processes real-time subscription updates
+/// @details Parses and displays orderbook changes and market data
+/// @param msg JSON message containing subscription update data
 void MessageParser:: handle_subscription_response(const nlohmann::json& msg) {
     try {
         // Extracting subscription details

@@ -1,15 +1,20 @@
+/// @file deribit_client.cpp
+/// @brief Implementation of the DeribitClient class for interacting with Deribit exchange
+
 // deribit_client.cpp
 //[TODO: add message parsing  try using name or ny entity returned in json object similar name , queue for write operations , error logging ]
 #include "deribit_client.hpp"
 #include <boost/asio/connect.hpp>
 #include <iostream>
+
+/// @brief Initialize static members
 std::queue<std::string> DeribitClient::receive_queue;
 std::queue<std::string> DeribitClient::send_queue;
 std::mutex DeribitClient::receive_queue_mutex;
 std::mutex DeribitClient::send_queue_mutex;
 std::shared_ptr<spdlog::logger> DeribitClient::logger_ = nullptr;
 
-
+/// @brief Constructs a new DeribitClient with SSL context and logging setup
 DeribitClient::DeribitClient(const std::string& host, const std::string& port, const std::string& target)
     : host_(host),
       port_(port),
@@ -26,6 +31,7 @@ DeribitClient::DeribitClient(const std::string& host, const std::string& port, c
     spdlog::info(" DeribitClient created for {}:{}{}", host, port, target);
 }
 
+/// @brief Establishes secure WebSocket connection and starts message handling threads
 void DeribitClient::connect() {
     tcp::resolver resolver(ioc_);
     auto const results = resolver.resolve(host_, port_);
@@ -74,7 +80,7 @@ std::string DeribitClient::generate_id(const std::string& function_name) {
     return function_name + "#" + std::to_string(++msg_id_);
 }
 
-
+/// @brief Initializes and configures the logging system with file and console outputs
 void DeribitClient::init_logger() {
     try {
         auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/deribit.log", 20 * 1024 * 1024, 3);
@@ -95,13 +101,16 @@ void DeribitClient::init_logger() {
     }
 }
 
-
+/// @brief Handles and logs errors that occur during operations
+/// @param context Description of where the error occurred
+/// @param e The exception that was caught
 void DeribitClient::handle_error(const std::string& context, const std::exception& e) {
     std::string err_msg = fmt::format(" [{}] Error: {}", context, e.what());
     spdlog::error(err_msg);
    
 }
 
+/// @brief Main message receiving loop that processes incoming WebSocket messages
 void DeribitClient::receive_loop() {
     try {
         boost::beast::flat_buffer buffer;
@@ -122,6 +131,7 @@ void DeribitClient::receive_loop() {
     }
 }
 
+/// @brief Message processing thread that handles received messages
 void DeribitClient::process_messages() {
     while (true) {
         std::string message ;
@@ -150,7 +160,8 @@ void DeribitClient::process_messages() {
     }
 }
 
-
+/// @brief Adds a message to the send queue
+/// @param msg JSON message to be sent
 void DeribitClient::send_message(const json& msg) {
     std::string message = msg.dump();
     {
@@ -161,7 +172,7 @@ void DeribitClient::send_message(const json& msg) {
     }
 }
 
-
+/// @brief Message sending thread that processes outgoing messages
 void DeribitClient::send_messages() {
     while (true) {
        
@@ -179,6 +190,7 @@ void DeribitClient::send_messages() {
     }
 }
 
+/// @brief Gracefully closes the WebSocket connection and joins threads
 void DeribitClient::close() {
     
     try{
@@ -200,7 +212,9 @@ void DeribitClient::close() {
     }
 }
 
-
+/// @brief Sends authentication request to the Deribit API
+/// @param api_key Client API key
+/// @param api_secret Client API secret
 void DeribitClient::send_auth(const std::string& api_key, const std::string& api_secret) {
     json msg = {
         {"jsonrpc", "2.0"},
@@ -219,8 +233,8 @@ void DeribitClient::send_auth(const std::string& api_key, const std::string& api
     spdlog::info(" Sent authentication request");
 }
 
-
-
+/// @brief Places an order with specified parameters
+/// @note All optional parameters are handled through std::optional
 void DeribitClient::place_order(
      const std::string& instrument,
     std::optional<double> amount,
@@ -324,7 +338,6 @@ void DeribitClient::cancel_all(
     std::cout << "Sent cancel all request\n";
 }
 
-
 void DeribitClient::get_orderbook(const std::string& instrument_name, int depth) {
     json params = {
         {"instrument_name", instrument_name},
@@ -360,6 +373,8 @@ void DeribitClient::get_positions(const std::string& currency, const std::string
     spdlog::info("📦 Requested positions for currency: {}, kind: {}", currency, kind);
 }
 
+/// @brief Subscribes to order book updates for a specific instrument
+/// @param instrument The instrument to subscribe to (e.g., "BTC-PERPETUAL")
 void DeribitClient::subscribe_book(const std::string& instrument) {
     if (subscribed_symbols_.count(instrument)) {
         std::cout << " Already subscribed to " << instrument << "\n";
@@ -382,6 +397,8 @@ void DeribitClient::subscribe_book(const std::string& instrument) {
     spdlog::info(" Subscribed to {} order book", instrument);
 }
 
+/// @brief Unsubscribes from order book updates
+/// @param symbol The symbol to unsubscribe from
 void DeribitClient::unsubscribe(const std::string& symbol) {
     if (!subscribed_symbols_.count(symbol)) {
         std::cout << " Not subscribed to " << symbol << "\n";
@@ -404,6 +421,7 @@ void DeribitClient::unsubscribe(const std::string& symbol) {
     spdlog::info(" Unsubscribed from {}", symbol);
 }
 
+/// @brief Lists all current subscriptions to the console
 void DeribitClient::list_subscriptions() const {
     std::cout << " Subscribed Symbols:\n";
     if (subscribed_symbols_.empty()) {

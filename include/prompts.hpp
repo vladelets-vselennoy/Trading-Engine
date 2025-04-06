@@ -4,7 +4,16 @@
 #include <iostream>
 #include "deribit_client.hpp"
 
-
+/// @brief Handles user input for placing a new order
+/// @param client Reference to the DeribitClient instance
+/// @details Prompts user for order details including:
+///          - Symbol (required)
+///          - Amount and price
+///          - Order type (limit/market)
+///          - Time in force
+///          - Label
+///          - Trigger settings
+///          - Post-only and reduce-only flags
 void get_place_order_prompt(DeribitClient& client) {
     std::string symbol;
     double amount, price, trigger_price;
@@ -72,6 +81,14 @@ void get_place_order_prompt(DeribitClient& client) {
     std::cout << "Order placed for " << symbol << " with amount " << amount << " at price " << price << ".\n";
 }
 
+/// @brief Handles user input for modifying an existing order
+/// @param client Reference to the DeribitClient instance
+/// @details Prompts user for:
+///          - Order ID (required)
+///          - New amount and price
+///          - Post-only setting
+///          - Time in force
+///          - Label
 void get_modify_order_prompt(DeribitClient& client) {
     std::string order_id;
     double amount, price;
@@ -115,7 +132,11 @@ void get_modify_order_prompt(DeribitClient& client) {
     std::cout << "Order " << order_id << " modified with new amount " << amount << " and price " << price << ".\n";
 }
 
-// Function to handle the prompt and fetching the orderbook
+/// @brief Handles user input for fetching orderbook data
+/// @param client Reference to the DeribitClient instance
+/// @details Prompts user for:
+///          - Symbol (required)
+///          - Orderbook depth (optional, defaults to 10)
 void get_orderbook_prompt(DeribitClient& client) {
     std::string symbol;
     int depth;
@@ -151,7 +172,11 @@ void get_orderbook_prompt(DeribitClient& client) {
     std::cout << "Orderbook for symbol " << symbol << " with depth " << depth << " requested.\n";
 }
 
-// Function to handle the prompt and fetching positions
+/// @brief Handles user input for fetching position information
+/// @param client Reference to the DeribitClient instance
+/// @details Prompts user for:
+///          - Currency (required, e.g., "BTC")
+///          - Position kind (optional, defaults to "any")
 void get_positions_prompt(DeribitClient& client) {
     std::string currency;
     std::string kind;
@@ -177,7 +202,10 @@ void get_positions_prompt(DeribitClient& client) {
     std::cout << "Positions for currency " << currency << " and kind " << kind << " requested.\n";
 }
 
-// Function to handle the prompt for unsubscribing from a symbol
+/// @brief Handles user input for unsubscribing from market data
+/// @param client Reference to the DeribitClient instance
+/// @details Prompts user for:
+///          - Symbol to unsubscribe from (required)
 void get_unsubscribe_prompt(DeribitClient& client) {
     std::string symbol;
 

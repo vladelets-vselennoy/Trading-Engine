@@ -26,35 +26,87 @@ namespace ssl = boost::asio::ssl;
 using tcp = boost::asio::ip::tcp;
 using json = nlohmann::json;
 
+/// @brief Client class for interacting with the Deribit cryptocurrency exchange API
 class DeribitClient {
 public:
+    /// @brief Constructs a new DeribitClient
+    /// @param host The hostname of the Deribit server
+    /// @param port The port number for the connection
+    /// @param target The WebSocket endpoint path
     DeribitClient(const std::string& host, const std::string& port, const std::string& target);
 
+    /// @brief Establishes a WebSocket connection to the Deribit server
     void connect();
+
+    /// @brief Starts the message receiving thread
     void start_receiving();
+
+    /// @brief Starts the message sending thread
     void start_sending();
+
+    /// @brief Authenticates with the Deribit API
+    /// @param api_key The API key from Deribit
+    /// @param api_secret The API secret from Deribit
     void send_auth(const std::string& api_key, const std::string& api_secret);
+
+    /// @brief Subscribes to orderbook updates for an instrument
+    /// @param instrument The instrument identifier (e.g., "BTC-PERPETUAL")
     void subscribe_book(const std::string& instrument);
+
+    /// @brief Cancels an order by ID
+    /// @param order_id The order ID to cancel
     void cancel_order(const std::string& order_id);
-    // void place_order(const std::string& instrument, double amount, double price);
+
+    /// @brief Closes the WebSocket connection
     void close();
+
+    /// @brief Cancels all orders for a specific instrument type
+    /// @param instrument_type The type of instrument
     void cancel_all(const std::string& instrument_type);
+
+    /// @brief Gets the orderbook for an instrument
+    /// @param instrument_name The instrument name
+    /// @param depth The depth of the orderbook (default: 10)
     void get_orderbook(const std::string& instrument_name, int depth = 10);
+
+    /// @brief Gets positions for a currency
+    /// @param currency The currency to get positions for
+    /// @param kind The kind of positions (default: "any")
     void get_positions(const std::string& currency, const std::string& kind = "any");
+
+    /// @brief Unsubscribes from a symbol's updates
+    /// @param symbol The symbol to unsubscribe from
     void unsubscribe(const std::string& symbol);
+
+    /// @brief Generates a unique message ID
+    /// @param function_name The name of the calling function
+    /// @return A unique message identifier
     std::string generate_id(const std::string& function_name);
      bool is_authenticated_ = false;
 
+    /// @brief Lists all active subscriptions
     void list_subscriptions() const;
-     static void init_logger();
+
+    /// @brief Initializes the logging system
+    static void init_logger();
 
      void process_messages();
      void send_messages();
      void start_message_processing();
      void handle_error(const std::string& context, const std::exception& e);
 
-
-
+    /// @brief Places an order on the exchange
+    /// @param instrument The instrument to trade
+    /// @param amount Optional amount in currency
+    /// @param contracts Optional number of contracts
+    /// @param type Order type (e.g., "limit", "market")
+    /// @param price Optional limit price
+    /// @param time_in_force Optional TIF instruction
+    /// @param post_only Optional post-only flag
+    /// @param reduce_only Optional reduce-only flag
+    /// @param label Optional order label
+    /// @param trigger_price Optional trigger price
+    /// @param trigger Optional trigger type
     void place_order(
         const std::string& instrument,
         std::optional<double> amount = std::nullopt,
@@ -68,6 +120,14 @@ public:
         std::optional<double> trigger_price = std::nullopt,
         std::optional<std::string> trigger = std::nullopt
     );
+
+    /// @brief Modifies an existing order
+    /// @param order_id The order ID to modify
+    /// @param amount Optional new amount
+    /// @param price Optional new price
+    /// @param post_only Optional post-only setting
+    /// @param time_in_force Optional new TIF
+    /// @param label Optional new label
     void modify_order(
     const std::string& order_id,
     std::optional<double> amount = std::nullopt,
@@ -76,20 +136,24 @@ public:
     std::optional<std::string> time_in_force = std::nullopt,
     std::optional<std::string> label = std::nullopt
     );
+
+    /// @brief Cancels all orders matching criteria
+    /// @param type Optional order type filter
+    /// @param instrument_name Optional instrument filter
+    /// @param kind Optional kind filter
     void cancel_all(
     std::optional<std::string> type = std::nullopt,
     std::optional<std::string> instrument_name = std::nullopt,
     std::optional<std::string> kind = std::nullopt
     );
-    
-    
-
-
-
 
 private:
+    /// @brief Main receive loop for WebSocket messages
     void receive_loop();
-     void send_message(const json& msg);  
+
+    /// @brief Sends a JSON message through WebSocket
+    /// @param msg The message to send
+    void send_message(const json& msg);  
     std::string host_, port_, target_;
     boost::asio::io_context ioc_;
     ssl::context ctx_;
