@@ -39,9 +39,10 @@ endif()
 
 # Add your source files
 set(SOURCES
-    main.cpp
+    
     src/deribit_client.cpp
     src/message_parser.cpp
+    main.cpp
 )
 
 # Include directories
@@ -52,7 +53,8 @@ include_directories(
 # Find required packages
 find_package(Boost REQUIRED COMPONENTS system thread)
 find_package(OpenSSL REQUIRED)
-
+find_package(spdlog REQUIRED)
+find_package(fmt REQUIRED)
 # Add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -62,6 +64,8 @@ target_link_libraries(${PROJECT_NAME}
     Boost::thread
     OpenSSL::SSL
     OpenSSL::Crypto
+    spdlog::spdlog
+    fmt::fmt
     pthread
 )
 

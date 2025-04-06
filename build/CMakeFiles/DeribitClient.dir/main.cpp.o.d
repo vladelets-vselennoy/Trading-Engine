@@ -1480,8 +1480,25 @@ CMakeFiles/DeribitClient.dir/main.cpp.o: \
  /usr/include/c++/11/bits/this_thread_sleep.h \
  /usr/include/c++/11/optional \
  /mnt/c/all/pre\ job\ work/GQTEF/include/message_parser.hpp \
- /usr/include/c++/11/unordered_set \
+ /usr/include/fmt/format.h /usr/include/fmt/core.h \
+ /usr/include/fmt/core.h /usr/include/c++/11/unordered_set \
  /usr/include/c++/11/bits/unordered_set.h /usr/include/c++/11/queue \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc /usr/include/c++/11/bits/stl_queue.h \
- /usr/include/c++/11/iostream
+ /usr/include/spdlog/spdlog.h /usr/include/spdlog/common.h \
+ /usr/include/spdlog/tweakme.h /usr/include/spdlog/details/null_mutex.h \
+ /usr/include/spdlog/fmt/fmt.h /usr/include/spdlog/details/registry.h \
+ /usr/include/spdlog/logger.h /usr/include/spdlog/details/log_msg.h \
+ /usr/include/spdlog/details/backtracer.h \
+ /usr/include/spdlog/details/log_msg_buffer.h \
+ /usr/include/spdlog/details/circular_q.h /usr/include/spdlog/version.h \
+ /usr/include/spdlog/details/synchronous_factory.h \
+ /usr/include/spdlog/sinks/rotating_file_sink.h \
+ /usr/include/spdlog/sinks/base_sink.h /usr/include/spdlog/sinks/sink.h \
+ /usr/include/spdlog/formatter.h \
+ /usr/include/spdlog/details/file_helper.h \
+ /usr/include/spdlog/sinks/stdout_color_sinks.h \
+ /usr/include/spdlog/sinks/ansicolor_sink.h \
+ /usr/include/spdlog/details/console_globals.h \
+ /usr/include/c++/11/iostream \
+ /mnt/c/all/pre\ job\ work/GQTEF/include/prompts.hpp

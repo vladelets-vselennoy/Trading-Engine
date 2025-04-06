@@ -15,6 +15,10 @@
 #include "message_parser.hpp"
 #include <unordered_set>
 #include <queue>
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+
 
 namespace beast = boost::beast;
 namespace websocket = beast::websocket;
@@ -28,6 +32,7 @@ public:
 
     void connect();
     void start_receiving();
+    void start_sending();
     void send_auth(const std::string& api_key, const std::string& api_secret);
     void subscribe_book(const std::string& instrument);
     void cancel_order(const std::string& order_id);
@@ -37,10 +42,17 @@ public:
     void get_orderbook(const std::string& instrument_name, int depth = 10);
     void get_positions(const std::string& currency, const std::string& kind = "any");
     void unsubscribe(const std::string& symbol);
-    void list_subscriptions() const;
+    std::string generate_id(const std::string& function_name);
+     bool is_authenticated_ = false;
 
-    static void process_messages();
+    void list_subscriptions() const;
+     static void init_logger();
+
+     void process_messages();
      void send_messages();
+     void start_message_processing();
+     void handle_error(const std::string& context, const std::exception& e);
+
 
 
     void place_order(
@@ -77,7 +89,7 @@ public:
 
 private:
     void receive_loop();
-     void send_message(const json& msg, std::chrono::milliseconds timeout = std::chrono::milliseconds(1000));  // Default timeout 1000ms
+     void send_message(const json& msg);  
     std::string host_, port_, target_;
     boost::asio::io_context ioc_;
     ssl::context ctx_;
@@ -85,6 +97,8 @@ private:
     std::mutex mtx_;
     int msg_id_ = 1;
     std::thread recv_thread_;
+    std::thread send_thread_;
+    std::thread process_thread_;
     std::unordered_set<std::string> subscribed_symbols_;
        // Queues for storing messages
     static std::queue<std::string> receive_queue;
@@ -93,6 +107,11 @@ private:
     // Mutexes for protecting access to the queues
     static std::mutex receive_queue_mutex;
     static std::mutex send_queue_mutex;
+   
+    static std::shared_ptr<spdlog::logger> logger_;
+
 
      boost::asio::steady_timer timer_;  
+     MessageParser parser_;
+    
 };

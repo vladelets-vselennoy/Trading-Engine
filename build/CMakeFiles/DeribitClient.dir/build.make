@@ -72,24 +72,10 @@ include CMakeFiles/DeribitClient.dir/flags.make
 CMakeFiles/DeribitClient.dir/codegen:
 .PHONY : CMakeFiles/DeribitClient.dir/codegen
 
-CMakeFiles/DeribitClient.dir/main.cpp.o: CMakeFiles/DeribitClient.dir/flags.make
-CMakeFiles/DeribitClient.dir/main.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/main.cpp
-CMakeFiles/DeribitClient.dir/main.cpp.o: CMakeFiles/DeribitClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DeribitClient.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DeribitClient.dir/main.cpp.o -MF CMakeFiles/DeribitClient.dir/main.cpp.o.d -o CMakeFiles/DeribitClient.dir/main.cpp.o -c "/mnt/c/all/pre job work/GQTEF/main.cpp"
-
-CMakeFiles/DeribitClient.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DeribitClient.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/all/pre job work/GQTEF/main.cpp" > CMakeFiles/DeribitClient.dir/main.cpp.i
-
-CMakeFiles/DeribitClient.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DeribitClient.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/all/pre job work/GQTEF/main.cpp" -o CMakeFiles/DeribitClient.dir/main.cpp.s
-
 CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: CMakeFiles/DeribitClient.dir/flags.make
 CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/src/deribit_client.cpp
 CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: CMakeFiles/DeribitClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o -MF CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o.d -o CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o -c "/mnt/c/all/pre job work/GQTEF/src/deribit_client.cpp"
 
 CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.i: cmake_force
@@ -103,7 +89,7 @@ CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.s: cmake_force
 CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: CMakeFiles/DeribitClient.dir/flags.make
 CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/src/message_parser.cpp
 CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: CMakeFiles/DeribitClient.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o -MF CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o.d -o CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o -c "/mnt/c/all/pre job work/GQTEF/src/message_parser.cpp"
 
 CMakeFiles/DeribitClient.dir/src/message_parser.cpp.i: cmake_force
@@ -114,23 +100,39 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DeribitClient.dir/src/message_parser.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/all/pre job work/GQTEF/src/message_parser.cpp" -o CMakeFiles/DeribitClient.dir/src/message_parser.cpp.s
 
+CMakeFiles/DeribitClient.dir/main.cpp.o: CMakeFiles/DeribitClient.dir/flags.make
+CMakeFiles/DeribitClient.dir/main.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/main.cpp
+CMakeFiles/DeribitClient.dir/main.cpp.o: CMakeFiles/DeribitClient.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/DeribitClient.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DeribitClient.dir/main.cpp.o -MF CMakeFiles/DeribitClient.dir/main.cpp.o.d -o CMakeFiles/DeribitClient.dir/main.cpp.o -c "/mnt/c/all/pre job work/GQTEF/main.cpp"
+
+CMakeFiles/DeribitClient.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/DeribitClient.dir/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/mnt/c/all/pre job work/GQTEF/main.cpp" > CMakeFiles/DeribitClient.dir/main.cpp.i
+
+CMakeFiles/DeribitClient.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/DeribitClient.dir/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/mnt/c/all/pre job work/GQTEF/main.cpp" -o CMakeFiles/DeribitClient.dir/main.cpp.s
+
 # Object files for target DeribitClient
 DeribitClient_OBJECTS = \
-"CMakeFiles/DeribitClient.dir/main.cpp.o" \
 "CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o" \
-"CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o"
+"CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o" \
+"CMakeFiles/DeribitClient.dir/main.cpp.o"
 
 # External object files for target DeribitClient
 DeribitClient_EXTERNAL_OBJECTS =
 
-DeribitClient: CMakeFiles/DeribitClient.dir/main.cpp.o
 DeribitClient: CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o
 DeribitClient: CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o
+DeribitClient: CMakeFiles/DeribitClient.dir/main.cpp.o
 DeribitClient: CMakeFiles/DeribitClient.dir/build.make
 DeribitClient: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0
 DeribitClient: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.74.0
 DeribitClient: /usr/lib/x86_64-linux-gnu/libssl.so
 DeribitClient: /usr/lib/x86_64-linux-gnu/libcrypto.so
+DeribitClient: /usr/lib/x86_64-linux-gnu/libspdlog.so.1.9.2
+DeribitClient: /usr/lib/x86_64-linux-gnu/libfmt.so.8.1.1
 DeribitClient: /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.74.0
 DeribitClient: CMakeFiles/DeribitClient.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/mnt/c/all/pre job work/GQTEF/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable DeribitClient"

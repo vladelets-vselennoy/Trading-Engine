@@ -7,6 +7,9 @@ std::queue<std::string> DeribitClient::receive_queue;
 std::queue<std::string> DeribitClient::send_queue;
 std::mutex DeribitClient::receive_queue_mutex;
 std::mutex DeribitClient::send_queue_mutex;
+std::shared_ptr<spdlog::logger> DeribitClient::logger_ = nullptr;
+
+
 DeribitClient::DeribitClient(const std::string& host, const std::string& port, const std::string& target)
     : host_(host),
       port_(port),
@@ -15,6 +18,12 @@ DeribitClient::DeribitClient(const std::string& host, const std::string& port, c
       ws_(ioc_, ctx_),
        timer_(ioc_) {
     ctx_.set_default_verify_paths();
+    
+    
+    init_logger(); 
+    
+    //  Initialize logger 
+    spdlog::info(" DeribitClient created for {}:{}{}", host, port, target);
 }
 
 void DeribitClient::connect() {
@@ -23,11 +32,84 @@ void DeribitClient::connect() {
     boost::asio::connect(beast::get_lowest_layer(ws_), results.begin(), results.end());
     ws_.next_layer().handshake(ssl::stream_base::client);
     ws_.handshake(host_, target_);
-    std::cout << "✅ Connected to Deribit WebSocket\n";
+    // AFter connecting
+    try {
+        spdlog::info("Starting receive_thread...");
+        start_receiving();
+    } catch (const std::exception& e) {
+        spdlog::error(" Exception while starting receive_thread: {}", e.what());
+    } catch (...) {
+        spdlog::error(" Unknown exception while starting receive_thread");
+    }
+    try{
+        spdlog::info(" Starting process_thread...");
+        start_message_processing();
+    } catch (const std::exception& e) {
+        spdlog::error(" Exception while starting process_thread: {}", e.what());
+    } catch (...) {
+        spdlog::error(" Unknown exception while starting process_thread");
+    }
+    try {
+        spdlog::info(" Starting send_thread...");
+        start_sending();
+    } catch (const std::exception& e) {
+        spdlog::error(" Exception while starting send_thread: {}", e.what());
+    } catch (...) {
+        spdlog::error(" Unknown exception while starting send_thread");
+    }
+        std::cout << " Connected to Deribit WebSocket\n";
 }
 
+void DeribitClient::start_sending(){
+    send_thread_ = std::thread(&DeribitClient::send_messages, this);
+}
+void DeribitClient::start_message_processing() {
+    process_thread_ = std::thread(&DeribitClient::process_messages, this);
+}
 void DeribitClient::start_receiving() {
     recv_thread_ = std::thread(&DeribitClient::receive_loop, this);
+    
+}
+std::string DeribitClient::generate_id(const std::string& function_name) {
+    return function_name + "#" + std::to_string(++msg_id_);
+}
+
+
+void DeribitClient::init_logger() {
+    try {
+        auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/deribit.log", 20 * 1024 * 1024, 3);
+        file_sink->set_level(spdlog::level::debug); // Log everything to file
+
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_level(spdlog::level::err); // Only log errors to console
+
+        std::vector<spdlog::sink_ptr> sinks {file_sink, console_sink};
+
+        logger_ = std::make_shared<spdlog::logger>("multi_sink", sinks.begin(), sinks.end());
+        spdlog::set_default_logger(logger_);
+        spdlog::set_level(spdlog::level::debug);  // This sets the global filtering level
+        spdlog::flush_on(spdlog::level::err);    // Flush immediately on error
+        spdlog::info(" Logger initialized successfully.");
+    } catch (const spdlog::spdlog_ex& ex) {
+        std::cerr << " Logger initialization failed: " << ex.what() << std::endl;
+    }
+}
+// void DeribitClient::init_logger() {
+//     try {
+//         logger_ = spdlog::rotating_logger_mt("file_logger", "logs/deribit.log", 20 * 1024 * 1024, 3);
+//         spdlog::set_default_logger(logger_);
+//         spdlog::set_level(spdlog::level::debug); // Change to info or warn in prod
+//         spdlog::flush_on(spdlog::level::err);    // Flush immediately on error
+//         spdlog::info(" Logger initialized successfully.");
+//     } catch (const spdlog::spdlog_ex& ex) {
+//         std::cerr << " Logger initialization failed: " << ex.what() << std::endl;
+//     }
+// }
+
+void DeribitClient::handle_error(const std::string& context, const std::exception& e) {
+    std::string err_msg = fmt::format(" [{}] Error: {}", context, e.what());
+    spdlog::error(err_msg);
+   
 }
 
 void DeribitClient::receive_loop() {
@@ -40,23 +122,42 @@ void DeribitClient::receive_loop() {
                 // Lock the receive queue to safely push the message
                 std::lock_guard<std::mutex> lock(receive_queue_mutex);
                 receive_queue.push(message);
-                std::cout << "📩 Received: " << message << "\n";
+                // std::cout << "📩 Received: " << message << "\n";
+                spdlog::info("📩 Received: {}", message);
             }
             buffer.clear();
         }
     } catch (const std::exception& e) {
-        std::cerr << "❌ Receive Error: " << e.what() << "\n";
+        handle_error("Receive Loop", e);
     }
 }
 
 void DeribitClient::process_messages() {
     while (true) {
-        if (!receive_queue.empty()) {
+        std::string message ;
+        {
             std::lock_guard<std::mutex> lock(receive_queue_mutex);
-            std::string message = receive_queue.front();
+        
+        if (!receive_queue.empty()) {
+            
+             message = receive_queue.front();
             receive_queue.pop();
             // Process the message (you can call MessageParser::parse_and_print here)
-            std::cout << "Processing received message: " << message << "\n";
+            // std::cout << "Processing received message: " << message << "\n";
+            
+        }}
+        if (!message.empty()) {
+            spdlog::info("Processing received message: {}", message);
+            try {
+                // Parse JSON, log, etc.
+                // spdlog::info("🔍 Processing message: {}", message);
+                parser_.parse_and_print(message);
+                // Parse and handle as needed...
+            } catch (const std::exception& e) {
+                handle_error("Message Processing", e);
+            }
+        } else {
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
 }
@@ -74,36 +175,17 @@ void DeribitClient::process_messages() {
 //             buffer.clear();
 //         }
 //     } catch (const std::exception& e) {
-//         std::cerr << "❌ Receive Error: " << e.what() << "\n";
+//         std::cerr << " Receive Error: " << e.what() << "\n";
 //     }
 // }
-void DeribitClient::send_message(const json& msg, std::chrono::milliseconds timeout) {
-    // Set up the timer with the specified timeout or default 1000ms
-    timer_.expires_after(timeout);  // Set timeout duration
-    std::cout << "🕒 Timeout set to: " << timeout.count() << " ms\n";
-
-    // Asynchronously wait for the timeout while sending the message
-    boost::asio::post(ioc_, [this, msg]() {
-        try {
-            std::lock_guard<std::mutex> lock(mtx_);
-            ws_.write(boost::asio::buffer(msg.dump()));
-            std::cout << "➡️ Sent: " << msg.dump() << "\n";
-        } catch (const std::exception& e) {
-            std::cerr << "❌ Send Error: " << e.what() << "\n";
-        }
-    });
-
-    // Wait for the timer expiration
-    boost::system::error_code ec;
-    timer_.async_wait([this](const boost::system::error_code& error) {
-        if (error != boost::asio::error::operation_aborted) {
-            std::cerr << "❌ Write Timeout Occurred\n";
-            // Handle timeout behavior here (e.g., notify user, log error, etc.)
-        }
-    });
-
-    // Run the io_context to manage both sending the message and checking for timeout
-    ioc_.run_for(timeout);
+void DeribitClient::send_message(const json& msg) {
+    std::string message = msg.dump();
+    {
+        std::lock_guard<std::mutex> lock(send_queue_mutex);
+        send_queue.push(message);
+        // std::cout << "➡️ Added to send queue: " << message << "\n";
+        spdlog::info("➡️ Added to send queue: {}", message);
+    }
 }
 // void DeribitClient::send_message(const json& msg) {
 //      std::string message = msg.dump();
@@ -120,32 +202,47 @@ void DeribitClient::send_message(const json& msg, std::chrono::milliseconds time
 
 void DeribitClient::send_messages() {
     while (true) {
+       
+         std::lock_guard<std::mutex> lock(send_queue_mutex);
         if (!send_queue.empty()) {
-            std::lock_guard<std::mutex> lock(send_queue_mutex);
+             std::cout << " Waiting to send messages...\n";
+           
             std::string message = send_queue.front();
             send_queue.pop();
             // Send the message via WebSocket
             ws_.write(boost::asio::buffer(message));
-            std::cout << "➡️ Sent: " << message << "\n";
+            // std::cout << "➡️ Sent: " << message << "\n";
+            spdlog::info("➡️ Sent: {}", message);
         }
     }
 }
 
 void DeribitClient::close() {
     // std::lock_guard<std::mutex> lock(mtx_);
+    try{
     std::lock_guard<std::mutex> lock(send_queue_mutex);
     ws_.close(websocket::close_code::normal);
     if (recv_thread_.joinable()) {
         recv_thread_.join();
     }
-    std::cout << "👋 Disconnected.\n";
+      if (send_thread_.joinable()) send_thread_.join(); 
+    if (process_thread_.joinable()) process_thread_.join();
+    // std::cout << "Disconnected.\n";
+    spdlog::info("Disconnected from Deribit WebSocket");
+    }
+    catch (const std::exception& e) {
+        handle_error("Close Connection", e);
+    }
+    catch (...) {
+        spdlog::error(" Unknown exception while closing connection");
+    }
 }
 
 
 void DeribitClient::send_auth(const std::string& api_key, const std::string& api_secret) {
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id", generate_id("auth")},
         {"method", "public/auth"},
         {"params", {
             {"grant_type", "client_credentials"},
@@ -155,7 +252,9 @@ void DeribitClient::send_auth(const std::string& api_key, const std::string& api
     };
 
     send_message(msg);
-    std::cout << "🔐 Sent authentication request\n";
+    // std::cout << "Sent authentication request\n";
+    is_authenticated_ = true;
+    spdlog::info(" Sent authentication request");
 }
 
 
@@ -207,14 +306,16 @@ void DeribitClient::place_order(
 
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id",generate_id("order")},
         {"method", "private/buy"},  // or sell based on future param
         {"params", params}
     };
 
     send_message(msg);
 
-    std::cout << "📝 Sent flexible order request for " << instrument << "\n";
+    // std::cout << " Sent flexible order request for " << instrument << "\n";
+    spdlog::info("Sent  order request for {}", instrument);
+
 }
 
 void DeribitClient::modify_order(
@@ -237,19 +338,20 @@ void DeribitClient::modify_order(
 
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id", generate_id("modify")},
         {"method", "private/edit"},
         {"params", params}
     };
 
     send_message(msg);
-    std::cout << "✏️ Sent modify request for Order ID: " << order_id << "\n";
+    // std::cout << "✏️ Sent modify request for Order ID: " << order_id << "\n";
+    spdlog::info("✏️ Sent modify request for Order ID: {}", order_id);
 }
 
 void DeribitClient::cancel_order(const std::string& order_id) {
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id", generate_id("cancel")},
         {"method", "private/cancel"},
         {"params", {
             {"order_id", order_id}
@@ -257,7 +359,7 @@ void DeribitClient::cancel_order(const std::string& order_id) {
     };
 
     send_message(msg);  // using the generic write function
-    std::cout << "🗑️ Sent cancel request for Order ID: " << order_id << "\n";
+    std::cout << " Sent cancel request for Order ID: " << order_id << "\n";
 }
 
 void DeribitClient::cancel_all(
@@ -267,7 +369,7 @@ void DeribitClient::cancel_all(
 ) {
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id",generate_id("cancel_all")},
         {"method", "private/cancel_all"},
         {"params", json::object()}
     };
@@ -277,7 +379,7 @@ void DeribitClient::cancel_all(
     if (kind) msg["params"]["kind"] = *kind;
 
     send_message(msg);
-    std::cout << "🗑️ Sent cancel all request\n";
+    std::cout << "Sent cancel all request\n";
 }
 
 
@@ -289,13 +391,13 @@ void DeribitClient::get_orderbook(const std::string& instrument_name, int depth)
 
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id", generate_id("get_orderbook")},
         {"method", "public/get_order_book"},
         {"params", params}
     };
 
     send_message(msg);
-    std::cout << "📊 Requested order book for: " << instrument_name << " (Depth: " << depth << ")\n";
+    std::cout << " Requested order book for: " << instrument_name << " (Depth: " << depth << ")\n";
 }
 
 void DeribitClient::get_positions(const std::string& currency, const std::string& kind) {
@@ -306,43 +408,49 @@ void DeribitClient::get_positions(const std::string& currency, const std::string
 
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
+        {"id", generate_id("get_positions")},
         {"method", "private/get_positions"},
         {"params", params}
     };
 
     send_message(msg);
-    std::cout << "📦 Requested positions for currency: " << currency << ", kind: " << kind << "\n";
+    // std::cout << "📦 Requested positions for currency: " << currency << ", kind: " << kind << "\n";
+    spdlog::info("📦 Requested positions for currency: {}, kind: {}", currency, kind);
 }
 
 void DeribitClient::subscribe_book(const std::string& instrument) {
     if (subscribed_symbols_.count(instrument)) {
-        std::cout << "🔁 Already subscribed to " << instrument << "\n";
+        std::cout << " Already subscribed to " << instrument << "\n";
         return;
     }
+    
+     std::string scope = is_authenticated_ ? "private" : "public";
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
-        {"method", "public/subscribe"},
+        {"id", generate_id("subscribe")},
+        {"method", scope +"/subscribe"},
         {"params", {
             {"channels", { "book." + instrument  }}
         }}
     };
 
     send_message(msg);
-    std::cout << "📡 Subscribed to " << instrument << " order book\n";
+    subscribed_symbols_.insert(instrument);
+    std::cout << " Subscribed to " << instrument << " order book\n";
+    spdlog::info(" Subscribed to {} order book", instrument);
 }
 
 void DeribitClient::unsubscribe(const std::string& symbol) {
     if (!subscribed_symbols_.count(symbol)) {
-        std::cout << "❌ Not subscribed to " << symbol << "\n";
+        std::cout << " Not subscribed to " << symbol << "\n";
         return;
     }
+     std::string scope = is_authenticated_ ? "private" : "public";
 
     json msg = {
         {"jsonrpc", "2.0"},
-        {"id", ++msg_id_},
-        {"method", "public/unsubscribe"},
+        {"id", generate_id("unsubscribe")},
+        {"method", scope + "/unsubscribe"},
         {"params", {
             {"channels", { "book." + symbol  }}
         }}
@@ -350,11 +458,12 @@ void DeribitClient::unsubscribe(const std::string& symbol) {
 
     send_message(msg);
     subscribed_symbols_.erase(symbol);
-    std::cout << "🚫 Unsubscribed from " << symbol << "\n";
+    std::cout << " Unsubscribed from " << symbol << "\n";
+    spdlog::info(" Unsubscribed from {}", symbol);
 }
 
 void DeribitClient::list_subscriptions() const {
-    std::cout << "📋 Subscribed Symbols:\n";
+    std::cout << " Subscribed Symbols:\n";
     if (subscribed_symbols_.empty()) {
         std::cout << "  None\n";
     } else {

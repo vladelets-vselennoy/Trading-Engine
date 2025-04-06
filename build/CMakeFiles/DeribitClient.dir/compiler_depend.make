@@ -1297,6 +1297,8 @@ CMakeFiles/DeribitClient.dir/main.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/main.cp
   /usr/include/fcntl.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/fmt/core.h \
+  /usr/include/fmt/format.h \
   /usr/include/libintl.h \
   /usr/include/limits.h \
   /usr/include/linux/close_range.h \
@@ -1435,6 +1437,27 @@ CMakeFiles/DeribitClient.dir/main.cpp.o: /mnt/c/all/pre\ job\ work/GQTEF/main.cp
   /usr/include/rpc/netdb.h \
   /usr/include/sched.h \
   /usr/include/signal.h \
+  /usr/include/spdlog/common.h \
+  /usr/include/spdlog/details/backtracer.h \
+  /usr/include/spdlog/details/circular_q.h \
+  /usr/include/spdlog/details/console_globals.h \
+  /usr/include/spdlog/details/file_helper.h \
+  /usr/include/spdlog/details/log_msg.h \
+  /usr/include/spdlog/details/log_msg_buffer.h \
+  /usr/include/spdlog/details/null_mutex.h \
+  /usr/include/spdlog/details/registry.h \
+  /usr/include/spdlog/details/synchronous_factory.h \
+  /usr/include/spdlog/fmt/fmt.h \
+  /usr/include/spdlog/formatter.h \
+  /usr/include/spdlog/logger.h \
+  /usr/include/spdlog/sinks/ansicolor_sink.h \
+  /usr/include/spdlog/sinks/base_sink.h \
+  /usr/include/spdlog/sinks/rotating_file_sink.h \
+  /usr/include/spdlog/sinks/sink.h \
+  /usr/include/spdlog/sinks/stdout_color_sinks.h \
+  /usr/include/spdlog/spdlog.h \
+  /usr/include/spdlog/tweakme.h \
+  /usr/include/spdlog/version.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
@@ -2924,6 +2947,8 @@ CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: /mnt/c/all/pre\ job\ work
   /usr/include/fcntl.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/fmt/core.h \
+  /usr/include/fmt/format.h \
   /usr/include/libintl.h \
   /usr/include/limits.h \
   /usr/include/linux/close_range.h \
@@ -3062,6 +3087,27 @@ CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: /mnt/c/all/pre\ job\ work
   /usr/include/rpc/netdb.h \
   /usr/include/sched.h \
   /usr/include/signal.h \
+  /usr/include/spdlog/common.h \
+  /usr/include/spdlog/details/backtracer.h \
+  /usr/include/spdlog/details/circular_q.h \
+  /usr/include/spdlog/details/console_globals.h \
+  /usr/include/spdlog/details/file_helper.h \
+  /usr/include/spdlog/details/log_msg.h \
+  /usr/include/spdlog/details/log_msg_buffer.h \
+  /usr/include/spdlog/details/null_mutex.h \
+  /usr/include/spdlog/details/registry.h \
+  /usr/include/spdlog/details/synchronous_factory.h \
+  /usr/include/spdlog/fmt/fmt.h \
+  /usr/include/spdlog/formatter.h \
+  /usr/include/spdlog/logger.h \
+  /usr/include/spdlog/sinks/ansicolor_sink.h \
+  /usr/include/spdlog/sinks/base_sink.h \
+  /usr/include/spdlog/sinks/rotating_file_sink.h \
+  /usr/include/spdlog/sinks/sink.h \
+  /usr/include/spdlog/sinks/stdout_color_sinks.h \
+  /usr/include/spdlog/spdlog.h \
+  /usr/include/spdlog/tweakme.h \
+  /usr/include/spdlog/version.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
@@ -3448,6 +3494,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
   /usr/include/errno.h \
   /usr/include/features-time64.h \
   /usr/include/features.h \
+  /usr/include/fmt/core.h \
+  /usr/include/fmt/format.h \
   /usr/include/libintl.h \
   /usr/include/linux/errno.h \
   /usr/include/locale.h \
@@ -3778,8 +3826,6 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/x86_64-linux-gnu/bits/fcntl.h:
 
-/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h:
-
 /usr/include/x86_64-linux-gnu/bits/eventfd.h:
 
 /usr/include/x86_64-linux-gnu/bits/environments.h:
@@ -3807,6 +3853,34 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/string.h:
 
 /usr/include/stdio.h:
+
+/usr/include/spdlog/version.h:
+
+/usr/include/spdlog/tweakme.h:
+
+/usr/include/spdlog/spdlog.h:
+
+/usr/include/spdlog/sinks/base_sink.h:
+
+/usr/include/spdlog/logger.h:
+
+/usr/include/spdlog/formatter.h:
+
+/usr/include/spdlog/sinks/rotating_file_sink.h:
+
+/usr/include/spdlog/fmt/fmt.h:
+
+/usr/include/spdlog/details/synchronous_factory.h:
+
+/usr/include/spdlog/details/log_msg.h:
+
+/usr/include/spdlog/details/file_helper.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h:
+
+/usr/include/spdlog/details/backtracer.h:
+
+/usr/include/spdlog/common.h:
 
 /usr/include/signal.h:
 
@@ -4074,6 +4148,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/c++/11/filesystem:
 
+/usr/include/spdlog/details/circular_q.h:
+
 /usr/include/c++/11/exception:
 
 /usr/include/c++/11/deque:
@@ -4181,6 +4257,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/c++/11/bits/nested_exception.h:
 
 /usr/include/c++/11/bits/move.h:
+
+/usr/include/fmt/core.h:
 
 /usr/include/c++/11/tr1/poly_hermite.tcc:
 
@@ -4496,6 +4574,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/boost/beast/websocket/ssl.hpp:
 
+/usr/include/spdlog/sinks/stdout_color_sinks.h:
+
 /usr/include/boost/beast/core/detail/is_invocable.hpp:
 
 /usr/include/nlohmann/detail/string_escape.hpp:
@@ -4647,6 +4727,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/boost/utility/compare_pointees.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
+
+/usr/include/fmt/format.h:
 
 /usr/include/boost/beast/http/detail/basic_parsed_list.hpp:
 
@@ -4863,6 +4945,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/boost/asio/detail/impl/null_event.ipp:
 
 /mnt/c/all/pre\ job\ work/GQTEF/include/message_parser.hpp:
+
+/usr/include/spdlog/sinks/sink.h:
 
 /usr/include/boost/type_traits.hpp:
 
@@ -5802,6 +5886,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/boost/date_time/gregorian/greg_ymd.hpp:
 
+/usr/include/spdlog/details/null_mutex.h:
+
 /usr/include/boost/make_unique.hpp:
 
 /usr/include/boost/date_time/gregorian/gregorian_types.hpp:
@@ -6002,6 +6088,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/boost/optional.hpp:
 
+/usr/include/spdlog/details/registry.h:
+
 /usr/include/boost/intrusive/rbtree_algorithms.hpp:
 
 /usr/include/boost/intrusive/set.hpp:
@@ -6079,6 +6167,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 
 /usr/include/boost/type_traits/has_trivial_constructor.hpp:
+
+/usr/include/spdlog/details/console_globals.h:
 
 /usr/include/boost/asio/buffer.hpp:
 
@@ -6564,6 +6654,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 
 /usr/include/boost/type_traits/add_pointer.hpp:
 
+/usr/include/spdlog/sinks/ansicolor_sink.h:
+
 /usr/include/boost/type_traits/add_reference.hpp:
 
 /usr/include/openssl/x509v3err.h:
@@ -6675,6 +6767,8 @@ CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: /mnt/c/all/pre\ job\ work
 /usr/include/boost/endian/detail/integral_by_size.hpp:
 
 /usr/include/boost/type_traits/has_nothrow_constructor.hpp:
+
+/usr/include/spdlog/details/log_msg_buffer.h:
 
 /usr/include/boost/type_traits/has_divides.hpp:
 
