@@ -18,6 +18,11 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/strand.hpp>
+#include <cstdlib>
+#include <memory>
+#include <set>
 
 
 namespace beast = boost::beast;
@@ -33,7 +38,8 @@ public:
     /// @param host The hostname of the Deribit server
     /// @param port The port number for the connection
     /// @param target The WebSocket endpoint path
-    DeribitClient(const std::string& host, const std::string& port, const std::string& target);
+    /// @param server_port The local server port number
+    DeribitClient(const std::string& host, const std::string& port, const std::string& target, uint16_t server_port);  // Changed from int to uint16_t for consistency
 
     /// @brief Establishes a WebSocket connection to the Deribit server
     void connect();
@@ -147,6 +153,12 @@ public:
     std::optional<std::string> kind = std::nullopt
     );
 
+    /// @brief Starts the local WebSocket server
+    void start_server();
+
+    /// @brief Stops the local WebSocket server
+    void stop_server();
+
 private:
     /// @brief Main receive loop for WebSocket messages
     void receive_loop();
@@ -177,5 +189,65 @@ private:
 
      boost::asio::steady_timer timer_;  
      MessageParser parser_;
+
+    // Server-related members
+    uint16_t server_port_;
+    boost::asio::ip::tcp::acceptor acceptor_;
+    std::set<std::shared_ptr<websocket::stream<tcp::socket>>> sessions_;
+    std::mutex sessions_mutex_;
+
+    /// @brief Handles new client connections
+    void do_accept();
+
+    /// @brief Broadcasts message to all connected clients
+    void broadcast_message(const std::string& message);
+
+    /// @brief Removes a client session
+    void remove_session(std::shared_ptr<websocket::stream<tcp::socket>> session);
+
+    // Add new subscription tracking structures
+    struct ClientSession {
+        std::shared_ptr<websocket::stream<tcp::socket>> socket;
+        std::set<std::string> subscriptions;  // Channels this client is subscribed to
+        std::chrono::steady_clock::time_point last_active;
+    };
+
+    // Map of session ID to client session info
+    std::map<std::string, std::shared_ptr<ClientSession>> client_sessions_;
+    std::mutex client_sessions_mutex_;
+
+    // Map of channel to set of subscribed session IDs
+    std::map<std::string, std::set<std::string>> channel_subscribers_;
+    std::mutex channel_subscribers_mutex_;
+
+    /// @brief Adds a channel subscription for a client
+    /// @param session_id The client's session ID
+    /// @param channel The channel to subscribe to
+    void add_client_subscription(const std::string& session_id, const std::string& channel);
+
+    /// @brief Removes a channel subscription for a client
+    /// @param session_id The client's session ID
+    /// @param channel The channel to unsubscribe from
+    void remove_client_subscription(const std::string& session_id, const std::string& channel);
+
+    /// @brief Broadcasts message to clients subscribed to a specific channel
+    /// @param channel The channel to broadcast to
+    /// @param message The message to broadcast
+    void broadcast_to_channel(const std::string& channel, const std::string& message);
+
+    /// @brief Cleans up inactive client sessions
+    void cleanup_inactive_sessions();
+
+    /// @brief Handles a new WebSocket session
+    /// @param session The WebSocket session to handle
+    void handle_session(std::shared_ptr<websocket::stream<tcp::socket>> session);
+
+    /// @brief Updates the last active timestamp for a client session
+    /// @param session_id The ID of the session to update
+    void update_client_activity(const std::string& session_id);
+
+    /// @brief Removes a client session and all its subscriptions
+    /// @param session_id The ID of the session to remove
+    void remove_client_session(const std::string& session_id);
     
 };

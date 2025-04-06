@@ -1,0 +1,398 @@
+\hypertarget{classDeribitClient}{}\doxysection{Deribit\+Client Class Reference}
+\label{classDeribitClient}\index{DeribitClient@{DeribitClient}}
+
+
+Client class for interacting with the Deribit cryptocurrency exchange API.  
+
+
+
+
+{\ttfamily \#include $<$deribit\+\_\+client.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classDeribitClient_a02f9e421408cc84bcf8899ac87ffb773}{Deribit\+Client}} (const std\+::string \&host, const std\+::string \&port, const std\+::string \&target, uint16\+\_\+t server\+\_\+port)
+\begin{DoxyCompactList}\small\item\em Constructs a new \mbox{\hyperlink{classDeribitClient}{Deribit\+Client}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_ae29860c8d9050b176b3ec99c3e00cb5b}{connect}} ()
+\begin{DoxyCompactList}\small\item\em Establishes a Web\+Socket connection to the Deribit server. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_a5a96f9e125018131942a37d7e3ba4616}\label{classDeribitClient_a5a96f9e125018131942a37d7e3ba4616}} 
+void \mbox{\hyperlink{classDeribitClient_a5a96f9e125018131942a37d7e3ba4616}{start\+\_\+receiving}} ()
+\begin{DoxyCompactList}\small\item\em Starts the message receiving thread. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_aad548193e5cb8d17d601b53b5a328d9d}\label{classDeribitClient_aad548193e5cb8d17d601b53b5a328d9d}} 
+void \mbox{\hyperlink{classDeribitClient_aad548193e5cb8d17d601b53b5a328d9d}{start\+\_\+sending}} ()
+\begin{DoxyCompactList}\small\item\em Starts the message sending thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a9867e1d10ed4e81bd0a2e7127076fff3}{send\+\_\+auth}} (const std\+::string \&api\+\_\+key, const std\+::string \&api\+\_\+secret)
+\begin{DoxyCompactList}\small\item\em Authenticates with the Deribit API. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a2fd9e4d1c86d020183fa8b9c23288375}{subscribe\+\_\+book}} (const std\+::string \&instrument)
+\begin{DoxyCompactList}\small\item\em Subscribes to orderbook updates for an instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a461131bd50f820add09f20e5dce95f99}{cancel\+\_\+order}} (const std\+::string \&order\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Cancels an order by ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_abbdd5e915dbefd0576c8c8b2bf0e18a3}{close}} ()
+\begin{DoxyCompactList}\small\item\em Closes the Web\+Socket connection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a5285f9c2f2489f7f6fb2f628c9ee6bdf}{cancel\+\_\+all}} (const std\+::string \&instrument\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Cancels all orders for a specific instrument type. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a9608ae12d6ff77dd75c05d5ea388c7c2}{get\+\_\+orderbook}} (const std\+::string \&instrument\+\_\+name, int depth=10)
+\begin{DoxyCompactList}\small\item\em Gets the orderbook for an instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_abfadd961a7c3375b0e1f29bf37dd0ce6}{get\+\_\+positions}} (const std\+::string \&currency, const std\+::string \&kind=\char`\"{}any\char`\"{})
+\begin{DoxyCompactList}\small\item\em Gets positions for a currency. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a08d84a1cb19ddf4921b8956ad783e20c}{unsubscribe}} (const std\+::string \&symbol)
+\begin{DoxyCompactList}\small\item\em Unsubscribes from a symbol\textquotesingle{}s updates. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classDeribitClient_ab07dbaf8d0a81242ab08557cb209d36c}{generate\+\_\+id}} (const std\+::string \&function\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Generates a unique message ID. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a804da421360257635ed70f0c703f1a3c}{list\+\_\+subscriptions}} () const
+\begin{DoxyCompactList}\small\item\em Lists all active subscriptions. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_aeb54b3c6c8f0f70b03e05ae1d4c112d1}\label{classDeribitClient_aeb54b3c6c8f0f70b03e05ae1d4c112d1}} 
+void \mbox{\hyperlink{classDeribitClient_aeb54b3c6c8f0f70b03e05ae1d4c112d1}{process\+\_\+messages}} ()
+\begin{DoxyCompactList}\small\item\em Message processing thread that handles received messages. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_ac8a1ee0e53dcdf3390693e26351a69e3}\label{classDeribitClient_ac8a1ee0e53dcdf3390693e26351a69e3}} 
+void \mbox{\hyperlink{classDeribitClient_ac8a1ee0e53dcdf3390693e26351a69e3}{send\+\_\+messages}} ()
+\begin{DoxyCompactList}\small\item\em Message sending thread that processes outgoing messages. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_a06e57c66635a31808b658cfb0d7d8aef}\label{classDeribitClient_a06e57c66635a31808b658cfb0d7d8aef}} 
+void {\bfseries start\+\_\+message\+\_\+processing} ()
+\item 
+void \mbox{\hyperlink{classDeribitClient_a4cf06fce1e7f98474670c63beb11118a}{handle\+\_\+error}} (const std\+::string \&context, const std\+::exception \&e)
+\begin{DoxyCompactList}\small\item\em Handles and logs errors that occur during operations. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a4a8bd575cad3fd049b30d1774f202f30}{place\+\_\+order}} (const std\+::string \&instrument, std\+::optional$<$ double $>$ amount=std\+::nullopt, std\+::optional$<$ double $>$ contracts=std\+::nullopt, std\+::string type=\char`\"{}limit\char`\"{}, std\+::optional$<$ double $>$ price=std\+::nullopt, std\+::optional$<$ std\+::string $>$ time\+\_\+in\+\_\+force=std\+::nullopt, std\+::optional$<$ bool $>$ post\+\_\+only=std\+::nullopt, std\+::optional$<$ bool $>$ reduce\+\_\+only=std\+::nullopt, std\+::optional$<$ std\+::string $>$ label=std\+::nullopt, std\+::optional$<$ double $>$ trigger\+\_\+price=std\+::nullopt, std\+::optional$<$ std\+::string $>$ trigger=std\+::nullopt)
+\begin{DoxyCompactList}\small\item\em Places an order on the exchange. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a736d9f893487ff4266a1cb32ac1bc191}{modify\+\_\+order}} (const std\+::string \&order\+\_\+id, std\+::optional$<$ double $>$ amount=std\+::nullopt, std\+::optional$<$ double $>$ price=std\+::nullopt, std\+::optional$<$ std\+::string $>$ post\+\_\+only=std\+::nullopt, std\+::optional$<$ std\+::string $>$ time\+\_\+in\+\_\+force=std\+::nullopt, std\+::optional$<$ std\+::string $>$ label=std\+::nullopt)
+\begin{DoxyCompactList}\small\item\em Modifies an existing order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDeribitClient_a6c7ae912c79cf68a15db9e89a8f9083a}{cancel\+\_\+all}} (std\+::optional$<$ std\+::string $>$ type=std\+::nullopt, std\+::optional$<$ std\+::string $>$ instrument\+\_\+name=std\+::nullopt, std\+::optional$<$ std\+::string $>$ kind=std\+::nullopt)
+\begin{DoxyCompactList}\small\item\em Cancels all orders matching criteria. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_ab4b057bcd0a254c4683a0166c4981438}\label{classDeribitClient_ab4b057bcd0a254c4683a0166c4981438}} 
+void \mbox{\hyperlink{classDeribitClient_ab4b057bcd0a254c4683a0166c4981438}{start\+\_\+server}} ()
+\begin{DoxyCompactList}\small\item\em Starts the local Web\+Socket server. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDeribitClient_aed7b3d8bcaf5f54e8c38b1c9e0c33917}\label{classDeribitClient_aed7b3d8bcaf5f54e8c38b1c9e0c33917}} 
+void \mbox{\hyperlink{classDeribitClient_aed7b3d8bcaf5f54e8c38b1c9e0c33917}{stop\+\_\+server}} ()
+\begin{DoxyCompactList}\small\item\em Stops the local Web\+Socket server. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classDeribitClient_a6b7a526489ab18fb2e7b4f2347800ed6}{init\+\_\+logger}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the logging system. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDeribitClient_a130bc0bcf9cc82322d0258ac0fde55b1}\label{classDeribitClient_a130bc0bcf9cc82322d0258ac0fde55b1}} 
+bool {\bfseries is\+\_\+authenticated\+\_\+} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Client class for interacting with the Deribit cryptocurrency exchange API. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDeribitClient_a02f9e421408cc84bcf8899ac87ffb773}\label{classDeribitClient_a02f9e421408cc84bcf8899ac87ffb773}} 
+\index{DeribitClient@{DeribitClient}!DeribitClient@{DeribitClient}}
+\index{DeribitClient@{DeribitClient}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{DeribitClient()}{DeribitClient()}}
+{\footnotesize\ttfamily Deribit\+Client\+::\+Deribit\+Client (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{host,  }\item[{const std\+::string \&}]{port,  }\item[{const std\+::string \&}]{target,  }\item[{uint16\+\_\+t}]{server\+\_\+port }\end{DoxyParamCaption})}
+
+
+
+Constructs a new \mbox{\hyperlink{classDeribitClient}{Deribit\+Client}}. 
+
+Constructs a new \mbox{\hyperlink{classDeribitClient}{Deribit\+Client}} with SSL context and logging setup.
+
+
+\begin{DoxyParams}{Parameters}
+{\em host} & The hostname of the Deribit server \\
+\hline
+{\em port} & The port number for the connection \\
+\hline
+{\em target} & The Web\+Socket endpoint path \\
+\hline
+{\em server\+\_\+port} & The local server port number \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDeribitClient_a5285f9c2f2489f7f6fb2f628c9ee6bdf}\label{classDeribitClient_a5285f9c2f2489f7f6fb2f628c9ee6bdf}} 
+\index{DeribitClient@{DeribitClient}!cancel\_all@{cancel\_all}}
+\index{cancel\_all@{cancel\_all}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{cancel\_all()}{cancel\_all()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Deribit\+Client\+::cancel\+\_\+all (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{instrument\+\_\+type }\end{DoxyParamCaption})}
+
+
+
+Cancels all orders for a specific instrument type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em instrument\+\_\+type} & The type of instrument \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a6c7ae912c79cf68a15db9e89a8f9083a}\label{classDeribitClient_a6c7ae912c79cf68a15db9e89a8f9083a}} 
+\index{DeribitClient@{DeribitClient}!cancel\_all@{cancel\_all}}
+\index{cancel\_all@{cancel\_all}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{cancel\_all()}{cancel\_all()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Deribit\+Client\+::cancel\+\_\+all (\begin{DoxyParamCaption}\item[{std\+::optional$<$ std\+::string $>$}]{type = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{instrument\+\_\+name = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{kind = {\ttfamily std\+:\+:nullopt} }\end{DoxyParamCaption})}
+
+
+
+Cancels all orders matching criteria. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & Optional order type filter \\
+\hline
+{\em instrument\+\_\+name} & Optional instrument filter \\
+\hline
+{\em kind} & Optional kind filter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a461131bd50f820add09f20e5dce95f99}\label{classDeribitClient_a461131bd50f820add09f20e5dce95f99}} 
+\index{DeribitClient@{DeribitClient}!cancel\_order@{cancel\_order}}
+\index{cancel\_order@{cancel\_order}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{cancel\_order()}{cancel\_order()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::cancel\+\_\+order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{order\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Cancels an order by ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em order\+\_\+id} & The order ID to cancel \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_abbdd5e915dbefd0576c8c8b2bf0e18a3}\label{classDeribitClient_abbdd5e915dbefd0576c8c8b2bf0e18a3}} 
+\index{DeribitClient@{DeribitClient}!close@{close}}
+\index{close@{close}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Closes the Web\+Socket connection. 
+
+Gracefully closes the Web\+Socket connection and joins threads. \mbox{\Hypertarget{classDeribitClient_ae29860c8d9050b176b3ec99c3e00cb5b}\label{classDeribitClient_ae29860c8d9050b176b3ec99c3e00cb5b}} 
+\index{DeribitClient@{DeribitClient}!connect@{connect}}
+\index{connect@{connect}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::connect (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Establishes a Web\+Socket connection to the Deribit server. 
+
+Establishes secure Web\+Socket connection and starts message handling threads. \mbox{\Hypertarget{classDeribitClient_ab07dbaf8d0a81242ab08557cb209d36c}\label{classDeribitClient_ab07dbaf8d0a81242ab08557cb209d36c}} 
+\index{DeribitClient@{DeribitClient}!generate\_id@{generate\_id}}
+\index{generate\_id@{generate\_id}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{generate\_id()}{generate\_id()}}
+{\footnotesize\ttfamily std\+::string Deribit\+Client\+::generate\+\_\+id (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{function\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Generates a unique message ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em function\+\_\+name} & The name of the calling function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A unique message identifier 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDeribitClient_a9608ae12d6ff77dd75c05d5ea388c7c2}\label{classDeribitClient_a9608ae12d6ff77dd75c05d5ea388c7c2}} 
+\index{DeribitClient@{DeribitClient}!get\_orderbook@{get\_orderbook}}
+\index{get\_orderbook@{get\_orderbook}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{get\_orderbook()}{get\_orderbook()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::get\+\_\+orderbook (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{instrument\+\_\+name,  }\item[{int}]{depth = {\ttfamily 10} }\end{DoxyParamCaption})}
+
+
+
+Gets the orderbook for an instrument. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em instrument\+\_\+name} & The instrument name \\
+\hline
+{\em depth} & The depth of the orderbook (default\+: 10) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_abfadd961a7c3375b0e1f29bf37dd0ce6}\label{classDeribitClient_abfadd961a7c3375b0e1f29bf37dd0ce6}} 
+\index{DeribitClient@{DeribitClient}!get\_positions@{get\_positions}}
+\index{get\_positions@{get\_positions}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{get\_positions()}{get\_positions()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::get\+\_\+positions (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{currency,  }\item[{const std\+::string \&}]{kind = {\ttfamily \char`\"{}any\char`\"{}} }\end{DoxyParamCaption})}
+
+
+
+Gets positions for a currency. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em currency} & The currency to get positions for \\
+\hline
+{\em kind} & The kind of positions (default\+: \char`\"{}any\char`\"{}) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a4cf06fce1e7f98474670c63beb11118a}\label{classDeribitClient_a4cf06fce1e7f98474670c63beb11118a}} 
+\index{DeribitClient@{DeribitClient}!handle\_error@{handle\_error}}
+\index{handle\_error@{handle\_error}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{handle\_error()}{handle\_error()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::handle\+\_\+error (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{context,  }\item[{const std\+::exception \&}]{e }\end{DoxyParamCaption})}
+
+
+
+Handles and logs errors that occur during operations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & Description of where the error occurred \\
+\hline
+{\em e} & The exception that was caught \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a6b7a526489ab18fb2e7b4f2347800ed6}\label{classDeribitClient_a6b7a526489ab18fb2e7b4f2347800ed6}} 
+\index{DeribitClient@{DeribitClient}!init\_logger@{init\_logger}}
+\index{init\_logger@{init\_logger}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{init\_logger()}{init\_logger()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::init\+\_\+logger (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Initializes the logging system. 
+
+Initializes and configures the logging system with file and console outputs. \mbox{\Hypertarget{classDeribitClient_a804da421360257635ed70f0c703f1a3c}\label{classDeribitClient_a804da421360257635ed70f0c703f1a3c}} 
+\index{DeribitClient@{DeribitClient}!list\_subscriptions@{list\_subscriptions}}
+\index{list\_subscriptions@{list\_subscriptions}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{list\_subscriptions()}{list\_subscriptions()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::list\+\_\+subscriptions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Lists all active subscriptions. 
+
+Lists all current subscriptions to the console. \mbox{\Hypertarget{classDeribitClient_a736d9f893487ff4266a1cb32ac1bc191}\label{classDeribitClient_a736d9f893487ff4266a1cb32ac1bc191}} 
+\index{DeribitClient@{DeribitClient}!modify\_order@{modify\_order}}
+\index{modify\_order@{modify\_order}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{modify\_order()}{modify\_order()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::modify\+\_\+order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{order\+\_\+id,  }\item[{std\+::optional$<$ double $>$}]{amount = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ double $>$}]{price = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{post\+\_\+only = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{time\+\_\+in\+\_\+force = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{label = {\ttfamily std\+:\+:nullopt} }\end{DoxyParamCaption})}
+
+
+
+Modifies an existing order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em order\+\_\+id} & The order ID to modify \\
+\hline
+{\em amount} & Optional new amount \\
+\hline
+{\em price} & Optional new price \\
+\hline
+{\em post\+\_\+only} & Optional post-\/only setting \\
+\hline
+{\em time\+\_\+in\+\_\+force} & Optional new TIF \\
+\hline
+{\em label} & Optional new label \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a4a8bd575cad3fd049b30d1774f202f30}\label{classDeribitClient_a4a8bd575cad3fd049b30d1774f202f30}} 
+\index{DeribitClient@{DeribitClient}!place\_order@{place\_order}}
+\index{place\_order@{place\_order}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{place\_order()}{place\_order()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::place\+\_\+order (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{instrument,  }\item[{std\+::optional$<$ double $>$}]{amount = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ double $>$}]{contracts = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::string}]{type = {\ttfamily \char`\"{}limit\char`\"{}},  }\item[{std\+::optional$<$ double $>$}]{price = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{time\+\_\+in\+\_\+force = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ bool $>$}]{post\+\_\+only = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ bool $>$}]{reduce\+\_\+only = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{label = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ double $>$}]{trigger\+\_\+price = {\ttfamily std\+:\+:nullopt},  }\item[{std\+::optional$<$ std\+::string $>$}]{trigger = {\ttfamily std\+:\+:nullopt} }\end{DoxyParamCaption})}
+
+
+
+Places an order on the exchange. 
+
+Places an order with specified parameters.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instrument} & The instrument to trade \\
+\hline
+{\em amount} & Optional amount in currency \\
+\hline
+{\em contracts} & Optional number of contracts \\
+\hline
+{\em type} & Order type (e.\+g., \char`\"{}limit\char`\"{}, \char`\"{}market\char`\"{}) \\
+\hline
+{\em price} & Optional limit price \\
+\hline
+{\em time\+\_\+in\+\_\+force} & Optional TIF instruction \\
+\hline
+{\em post\+\_\+only} & Optional post-\/only flag \\
+\hline
+{\em reduce\+\_\+only} & Optional reduce-\/only flag \\
+\hline
+{\em label} & Optional order label \\
+\hline
+{\em trigger\+\_\+price} & Optional trigger price \\
+\hline
+{\em trigger} & Optional trigger type\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+All optional parameters are handled through std\+::optional 
+\end{DoxyNote}
+\mbox{\Hypertarget{classDeribitClient_a9867e1d10ed4e81bd0a2e7127076fff3}\label{classDeribitClient_a9867e1d10ed4e81bd0a2e7127076fff3}} 
+\index{DeribitClient@{DeribitClient}!send\_auth@{send\_auth}}
+\index{send\_auth@{send\_auth}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{send\_auth()}{send\_auth()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::send\+\_\+auth (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{api\+\_\+key,  }\item[{const std\+::string \&}]{api\+\_\+secret }\end{DoxyParamCaption})}
+
+
+
+Authenticates with the Deribit API. 
+
+Sends authentication request to the Deribit API.
+
+
+\begin{DoxyParams}{Parameters}
+{\em api\+\_\+key} & The API key from Deribit \\
+\hline
+{\em api\+\_\+secret} & The API secret from Deribit\\
+\hline
+{\em api\+\_\+key} & Client API key \\
+\hline
+{\em api\+\_\+secret} & Client API secret \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a2fd9e4d1c86d020183fa8b9c23288375}\label{classDeribitClient_a2fd9e4d1c86d020183fa8b9c23288375}} 
+\index{DeribitClient@{DeribitClient}!subscribe\_book@{subscribe\_book}}
+\index{subscribe\_book@{subscribe\_book}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{subscribe\_book()}{subscribe\_book()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::subscribe\+\_\+book (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{instrument }\end{DoxyParamCaption})}
+
+
+
+Subscribes to orderbook updates for an instrument. 
+
+Subscribes to order book updates for a specific instrument.
+
+
+\begin{DoxyParams}{Parameters}
+{\em instrument} & The instrument identifier (e.\+g., \char`\"{}\+BTC-\/\+PERPETUAL\char`\"{})\\
+\hline
+{\em instrument} & The instrument to subscribe to (e.\+g., \char`\"{}\+BTC-\/\+PERPETUAL\char`\"{}) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDeribitClient_a08d84a1cb19ddf4921b8956ad783e20c}\label{classDeribitClient_a08d84a1cb19ddf4921b8956ad783e20c}} 
+\index{DeribitClient@{DeribitClient}!unsubscribe@{unsubscribe}}
+\index{unsubscribe@{unsubscribe}!DeribitClient@{DeribitClient}}
+\doxysubsubsection{\texorpdfstring{unsubscribe()}{unsubscribe()}}
+{\footnotesize\ttfamily void Deribit\+Client\+::unsubscribe (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{symbol }\end{DoxyParamCaption})}
+
+
+
+Unsubscribes from a symbol\textquotesingle{}s updates. 
+
+Unsubscribes from order book updates.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The symbol to unsubscribe from \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/deribit\+\_\+client.\+hpp\item 
+src/\mbox{\hyperlink{deribit__client_8cpp}{deribit\+\_\+client.\+cpp}}\end{DoxyCompactItemize}

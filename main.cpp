@@ -34,6 +34,7 @@ int main() {
     std::string host = "test.deribit.com";
     std::string port = "443";
     std::string target = "/ws/api/v2";
+    uint16_t server_port = 8080;  // Local WebSocket server port
 
     try {
         // Initialize logging
@@ -43,9 +44,13 @@ int main() {
         spdlog::set_level(spdlog::level::debug);
         spdlog::info("📡 Starting Deribit WebSocket Client...");
 
-        // Create and connect client
-        DeribitClient client(host, port, target);
+        // Create client with server port
+        DeribitClient client(host, port, target, server_port);
         client.connect();
+        
+        // Start the local WebSocket server
+        client.start_server();
+        spdlog::info("Local WebSocket server running on port {}", server_port);
 
         // Main menu loop
         bool running = true;
@@ -105,7 +110,6 @@ int main() {
                 }
                 case 0: {
                     running = false;
-                    client.close();
                     break;
                 }
                 default:
@@ -113,6 +117,10 @@ int main() {
                     break;
             }
         }
+
+        // Add server cleanup
+        client.stop_server();
+        client.close();
     } 
     catch (const std::exception& e) {
         spdlog::error("💥 Unhandled exception in main: {}", e.what());

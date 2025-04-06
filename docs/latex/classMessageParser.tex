@@ -1,0 +1,65 @@
+\hypertarget{classMessageParser}{}\doxysection{Message\+Parser Class Reference}
+\label{classMessageParser}\index{MessageParser@{MessageParser}}
+
+
+Parser for handling Deribit Web\+Socket API messages Provides methods to parse and handle different types of responses from the exchange.  
+
+
+
+
+{\ttfamily \#include $<$message\+\_\+parser.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMessageParser_a3f64e37238a0ef58e91e1ee58985e209}{Message\+Parser}} ()
+\begin{DoxyCompactList}\small\item\em Constructs a \mbox{\hyperlink{classMessageParser}{Message\+Parser}} and initializes message handlers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMessageParser_ad6a2aac110087c7da6f516d113fbbb72}{parse\+\_\+and\+\_\+print}} (const std\+::string \&raw\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em Parses a raw message and routes it to appropriate handler. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Parser for handling Deribit Web\+Socket API messages Provides methods to parse and handle different types of responses from the exchange. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMessageParser_a3f64e37238a0ef58e91e1ee58985e209}\label{classMessageParser_a3f64e37238a0ef58e91e1ee58985e209}} 
+\index{MessageParser@{MessageParser}!MessageParser@{MessageParser}}
+\index{MessageParser@{MessageParser}!MessageParser@{MessageParser}}
+\doxysubsubsection{\texorpdfstring{MessageParser()}{MessageParser()}}
+{\footnotesize\ttfamily Message\+Parser\+::\+Message\+Parser (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructs a \mbox{\hyperlink{classMessageParser}{Message\+Parser}} and initializes message handlers. 
+
+Constructs \mbox{\hyperlink{classMessageParser}{Message\+Parser}} and initializes handler function map. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMessageParser_ad6a2aac110087c7da6f516d113fbbb72}\label{classMessageParser_ad6a2aac110087c7da6f516d113fbbb72}} 
+\index{MessageParser@{MessageParser}!parse\_and\_print@{parse\_and\_print}}
+\index{parse\_and\_print@{parse\_and\_print}!MessageParser@{MessageParser}}
+\doxysubsubsection{\texorpdfstring{parse\_and\_print()}{parse\_and\_print()}}
+{\footnotesize\ttfamily void Message\+Parser\+::parse\+\_\+and\+\_\+print (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{raw\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+Parses a raw message and routes it to appropriate handler. 
+
+Parses JSON message and routes to appropriate handler.
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+\_\+msg} & The raw JSON message string from Web\+Socket\\
+\hline
+\end{DoxyParams}
+Extracts function name from message ID and calls corresponding handler 
+\begin{DoxyParams}{Parameters}
+{\em raw\+\_\+msg} & Raw JSON string from Web\+Socket \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/message\+\_\+parser.\+hpp\item 
+src/\mbox{\hyperlink{message__parser_8cpp}{message\+\_\+parser.\+cpp}}\end{DoxyCompactItemize}

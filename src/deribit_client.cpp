@@ -15,13 +15,15 @@ std::mutex DeribitClient::send_queue_mutex;
 std::shared_ptr<spdlog::logger> DeribitClient::logger_ = nullptr;
 
 /// @brief Constructs a new DeribitClient with SSL context and logging setup
-DeribitClient::DeribitClient(const std::string& host, const std::string& port, const std::string& target)
+DeribitClient::DeribitClient(const std::string& host, const std::string& port, const std::string& target, uint16_t server_port)
     : host_(host),
       port_(port),
       target_(target),
       ctx_(ssl::context::tlsv12_client),
       ws_(ioc_, ctx_),
-       timer_(ioc_) {
+      timer_(ioc_),
+      server_port_(server_port),
+      acceptor_(ioc_, tcp::endpoint(tcp::v4(), server_port)) {
     ctx_.set_default_verify_paths();
     
     
@@ -150,6 +152,8 @@ void DeribitClient::process_messages() {
             try {
               
                 parser_.parse_and_print(message);
+                // Broadcast the message to all connected clients
+                broadcast_message(message);
                
             } catch (const std::exception& e) {
                 handle_error("Message Processing", e);
@@ -433,4 +437,277 @@ void DeribitClient::list_subscriptions() const {
     }
 }
 
+void DeribitClient::start_server() {
+    spdlog::info("Starting WebSocket server on port {}", server_port_);
+    do_accept();
+    
+    // Start the io_context in a separate thread
+    std::thread([this]() {
+        try {
+            ioc_.run();
+        } catch (const std::exception& e) {
+            spdlog::error("Server error: {}", e.what());
+        }
+    }).detach();
+}
 
+void DeribitClient::stop_server() {
+    std::lock_guard<std::mutex> lock(sessions_mutex_);
+    acceptor_.close();
+    for(auto& session : sessions_) {
+        boost::system::error_code ec;
+        session->close(websocket::close_code::normal, ec);
+    }
+    sessions_.clear();
+}
+
+void DeribitClient::do_accept() {
+    acceptor_.async_accept(
+        [this](boost::system::error_code ec, tcp::socket socket) {
+            if (!ec) {
+                auto session = std::make_shared<websocket::stream<tcp::socket>>(std::move(socket));
+                {
+                    std::lock_guard<std::mutex> lock(sessions_mutex_);
+                    sessions_.insert(session);
+                }
+                
+                session->async_accept(
+                    [this, session](boost::system::error_code ec) {
+                        if (ec) {
+                            remove_session(session);
+                        } else {
+                            // Set up async read for the session
+                            handle_session(session);
+                        }
+                    });
+            }
+            
+            do_accept(); // Continue accepting new connections
+        });
+}
+
+void DeribitClient::broadcast_message(const std::string& message) {
+    std::lock_guard<std::mutex> lock(sessions_mutex_);
+    for(auto& session : sessions_) {
+        boost::system::error_code ec;
+        session->write(boost::asio::buffer(message), ec);
+        if (ec) {
+            spdlog::error("Broadcast error: {}", ec.message());
+        }
+    }
+}
+
+void DeribitClient::remove_session(std::shared_ptr<websocket::stream<tcp::socket>> session) {
+    std::lock_guard<std::mutex> lock(sessions_mutex_);
+    sessions_.erase(session);
+}
+
+// void DeribitClient::handle_session(std::shared_ptr<websocket::stream<tcp::socket>> session) {
+//     auto session_id = std::to_string(reinterpret_cast<uintptr_t>(session.get()));
+//     auto buffer = std::make_shared<boost::beast::flat_buffer>();
+    
+//     // Initialize client session
+//     {
+//         std::lock_guard<std::mutex> lock(client_sessions_mutex_);
+//         auto client_session = std::make_shared<ClientSession>();
+//         client_session->socket = session;
+//         client_session->last_active = std::chrono::steady_clock::now();
+//         client_sessions_[session_id] = client_session;
+//     }
+    
+//     session->async_read(
+//         *buffer,
+//         [this, session, buffer, session_id]
+//         (boost::system::error_code ec, [[maybe_unused]] std::size_t bytes_transferred) {
+//             if (ec) {
+//                 remove_client_session(session_id);
+//                 return;
+//             }
+
+//             try {
+//                 // Process the received message
+//                 std::string message = boost::beast::buffers_to_string(buffer->data());
+//                 spdlog::info("Received message from client {}: {}", session_id, message);
+                
+//                 auto json_msg = json::parse(message);
+                
+//                 // Handle subscription request
+//                 if (json_msg.contains("subscribe")) {
+//                     std::string channel = json_msg["subscribe"].get<std::string>();
+//                     add_client_subscription(session_id, channel);
+                    
+//                     // Subscribe to Deribit if not already subscribed
+//                     if (!subscribed_symbols_.count(channel)) {
+//                         subscribe_book(channel);
+//                     }
+                    
+//                     // Send confirmation back to client
+//                     json response = {
+//                         {"status", "subscribed"},
+//                         {"channel", channel}
+//                     };
+//                     session->async_write(
+//                         boost::asio::buffer(response.dump()),
+//                         [](boost::system::error_code ec, [[maybe_unused]] std::size_t) {
+//                             if (ec) {
+//                                 spdlog::error("Failed to send subscription confirmation: {}", ec.message());
+//                             }
+//                         });
+//                 }
+//                 // Handle unsubscribe request
+//                 else if (json_msg.contains("unsubscribe")) {
+//                     std::string channel = json_msg["unsubscribe"].get<std::string>();
+//                     remove_client_subscription(session_id, channel);
+//                 }
+
+//                 update_client_activity(session_id);
+                
+//                 // Clear buffer and continue reading
+//                 buffer->consume(buffer->size());
+//                 handle_session(session);
+//             }
+//             catch (const std::exception& e) {
+//                 spdlog::error("Error processing client message: {}", e.what());
+//                 handle_session(session);
+//             }
+//         });
+// }
+
+// // ...rest of existing code...
+
+
+void DeribitClient::handle_session(std::shared_ptr<websocket::stream<tcp::socket>> session) {
+    auto session_id = std::to_string(reinterpret_cast<uintptr_t>(session.get()));
+    auto buffer = std::make_shared<boost::beast::flat_buffer>();
+    
+    // Initialize client session
+    {
+        std::lock_guard<std::mutex> lock(client_sessions_mutex_);
+        auto client_session = std::make_shared<ClientSession>();
+        client_session->socket = session;
+        client_session->last_active = std::chrono::steady_clock::now();
+        client_sessions_[session_id] = client_session;
+    }
+    
+    session->async_read(
+        *buffer,
+        [this, session, buffer, session_id]
+        (boost::system::error_code ec, [[maybe_unused]] std::size_t bytes_transferred) {
+            if (ec) {
+                remove_client_session(session_id);
+                return;
+            }
+
+            try {
+                // Process the received message
+                std::string message = boost::beast::buffers_to_string(buffer->data());
+                spdlog::info("Received message from client {}: {}", session_id, message);
+                
+                auto json_msg = json::parse(message);
+                
+                // Handle subscription request
+                if (json_msg.contains("subscribe")) {
+                    std::string channel = json_msg["subscribe"].get<std::string>();
+                    add_client_subscription(session_id, channel);
+                    
+                    // Subscribe to Deribit if not already subscribed
+                    if (!subscribed_symbols_.count(channel)) {
+                        subscribe_book(channel);
+                    }
+                    
+                    // Send confirmation back to client
+                    json response = {
+                        {"status", "subscribed"},
+                        {"channel", channel}
+                    };
+                    session->async_write(
+                        boost::asio::buffer(response.dump()),
+                        [](boost::system::error_code ec, [[maybe_unused]] std::size_t) {
+                            if (ec) {
+                                spdlog::error("Failed to send subscription confirmation: {}", ec.message());
+                            }
+                        });
+                }
+                // Handle unsubscribe request
+                else if (json_msg.contains("unsubscribe")) {
+                    std::string channel = json_msg["unsubscribe"].get<std::string>();
+                    remove_client_subscription(session_id, channel);
+                }
+
+                update_client_activity(session_id);
+                
+                // Clear buffer and continue reading
+                buffer->consume(buffer->size());
+                handle_session(session);
+            }
+            catch (const std::exception& e) {
+                spdlog::error("Error processing client message: {}", e.what());
+                handle_session(session);
+            }
+        });
+}
+
+void DeribitClient::update_client_activity(const std::string& session_id) {
+    std::lock_guard<std::mutex> lock(client_sessions_mutex_);
+    if (auto it = client_sessions_.find(session_id); it != client_sessions_.end()) {
+        it->second->last_active = std::chrono::steady_clock::now();
+        spdlog::debug("Updated activity for client: {}", session_id);
+    }
+}
+
+void DeribitClient::remove_client_subscription(const std::string& session_id, const std::string& channel) {
+    std::lock_guard<std::mutex> lock1(client_sessions_mutex_);
+    std::lock_guard<std::mutex> lock2(channel_subscribers_mutex_);
+
+    // Remove from client's subscriptions
+    if (auto session_it = client_sessions_.find(session_id); session_it != client_sessions_.end()) {
+        session_it->second->subscriptions.erase(channel);
+        spdlog::info("Removed channel {} from client {}", channel, session_id);
+    }
+
+    // Remove from channel subscribers
+    if (auto channel_it = channel_subscribers_.find(channel); channel_it != channel_subscribers_.end()) {
+        channel_it->second.erase(session_id);
+        if (channel_it->second.empty()) {
+            channel_subscribers_.erase(channel_it);
+            spdlog::info("Removed empty channel: {}", channel);
+        }
+    }
+}
+
+void DeribitClient::add_client_subscription(const std::string& session_id, const std::string& channel) {
+    std::lock_guard<std::mutex> lock1(client_sessions_mutex_);
+    std::lock_guard<std::mutex> lock2(channel_subscribers_mutex_);
+
+    // Add to client's subscriptions
+    if (auto it = client_sessions_.find(session_id); it != client_sessions_.end()) {
+        it->second->subscriptions.insert(channel);
+        channel_subscribers_[channel].insert(session_id);
+        spdlog::info("Added subscription for client {} to channel {}", session_id, channel);
+    } else {
+        spdlog::error("Client {} not found when adding subscription", session_id);
+    }
+}
+
+void DeribitClient::remove_client_session(const std::string& session_id) {
+    std::lock_guard<std::mutex> lock1(client_sessions_mutex_);
+    std::lock_guard<std::mutex> lock2(channel_subscribers_mutex_);
+    
+    // Find the client session
+    auto session_it = client_sessions_.find(session_id);
+    if (session_it != client_sessions_.end()) {
+        // Remove client from all subscribed channels
+        for (const auto& channel : session_it->second->subscriptions) {
+            if (auto channel_it = channel_subscribers_.find(channel); channel_it != channel_subscribers_.end()) {
+                channel_it->second.erase(session_id);
+                if (channel_it->second.empty()) {
+                    channel_subscribers_.erase(channel_it);
+                }
+            }
+        }
+
+        // Remove the client session
+        client_sessions_.erase(session_it);
+        spdlog::info("Removed client session: {}", session_id);
+    }
+}
