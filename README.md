@@ -46,6 +46,12 @@ For a more detailed visualization of the system architecture and data flow, see 
 
 ![Deribit Client Architecture](assets/flow_chart.png)
 
+### WebSocket Server Architecture
+
+The WebSocket server component provides real-time data streaming to local applications:
+
+![WebSocket Server Flow](assets/websocket.png)
+
 ### Data Flow
 
 1. **Client Initialization**:
