@@ -54,8 +54,9 @@ int main() {
 
         // Main menu loop
         bool running = true;
+        print_menu();
         while (running) {
-            print_menu();
+          
             int choice;
             std::cin >> choice;
             std::cin.ignore(); // flush newline

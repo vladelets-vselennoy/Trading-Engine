@@ -210,31 +210,43 @@ void MessageParser::handle_orderbook(const json& msg) {
     }
 
     // Bids
+    // if (result.contains("bids") && result["bids"].is_array()) {
+    //     fmt::print("Top Bids:\n");
+    //     for (const auto& bid : result["bids"]) {
+    //        if (bid.is_array() && bid.size() == 2) {
+    //         // Make sure both bid[0] and bid[1] are numbers
+    //         if (bid[0].is_number() && bid[1].is_number()) {
+    //             fmt::print("  Price: {}, Amount: {}\n", bid[0], bid[1]);
+    //         } else {
+    //             fmt::print("  Invalid bid data (non-number values found).\n");
+    //         }
+    //     }
+    // }
+    // }
     if (result.contains("bids") && result["bids"].is_array()) {
-        fmt::print("Top Bids:\n");
-        for (const auto& bid : result["bids"]) {
-           if (bid.is_array() && bid.size() == 2) {
-            // Make sure both bid[0] and bid[1] are numbers
-            if (bid[0].is_number() && bid[1].is_number()) {
-                fmt::print("  Price: {}, Amount: {}\n", bid[0], bid[1]);
-            } else {
-                fmt::print("  Invalid bid data (non-number values found).\n");
-            }
-        }
-    }
+        fmt::print("Top Bids (Format: [Price, Amount]):\n{}\n", result["bids"].dump(4));
+    } else {
+        fmt::print("No bids available or invalid format.\n");
     }
 
+
     // Asks
+    // if (result.contains("asks") && result["asks"].is_array() && !result["asks"].empty()) {
+    //     fmt::print("Top Asks:\n");
+    //     for (const auto& ask : result["asks"]) {
+    //         if (ask.is_array() && ask.size() == 2) {
+    //             fmt::print("  Price: {}, Amount: {}\n", ask[0], ask[1]);
+    //         }
+    //     }
+    // } else {
+    //     fmt::print("No asks available.\n");
+    // }
     if (result.contains("asks") && result["asks"].is_array() && !result["asks"].empty()) {
-        fmt::print("Top Asks:\n");
-        for (const auto& ask : result["asks"]) {
-            if (ask.is_array() && ask.size() == 2) {
-                fmt::print("  Price: {}, Amount: {}\n", ask[0], ask[1]);
-            }
-        }
+        fmt::print("Top Asks (Format: [Price, Amount]):\n{}\n", result["asks"].dump(4));
     } else {
         fmt::print("No asks available.\n");
     }
+
 }
 
 /// @brief Processes position information response

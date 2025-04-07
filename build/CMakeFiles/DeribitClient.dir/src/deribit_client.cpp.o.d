@@ -1,7 +1,7 @@
 CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: \
- /mnt/c/all/pre\ job\ work/GQTEF/src/deribit_client.cpp \
+ /mnt/c/all/pre\ job\ work/gqtef/src/deribit_client.cpp \
  /usr/include/stdc-predef.h \
- /mnt/c/all/pre\ job\ work/GQTEF/include/deribit_client.hpp \
+ /mnt/c/all/pre\ job\ work/gqtef/include/deribit_client.hpp \
  /usr/include/boost/beast/core.hpp \
  /usr/include/boost/beast/core/detail/config.hpp \
  /usr/include/boost/config.hpp /usr/include/boost/config/user.hpp \
@@ -1480,7 +1480,7 @@ CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o: \
  /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
  /usr/include/c++/11/bits/this_thread_sleep.h \
  /usr/include/c++/11/optional \
- /mnt/c/all/pre\ job\ work/GQTEF/include/message_parser.hpp \
+ /mnt/c/all/pre\ job\ work/gqtef/include/message_parser.hpp \
  /usr/include/fmt/format.h /usr/include/fmt/core.h \
  /usr/include/fmt/core.h /usr/include/c++/11/unordered_set \
  /usr/include/c++/11/bits/unordered_set.h /usr/include/c++/11/queue \

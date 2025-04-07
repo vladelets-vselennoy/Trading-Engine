@@ -12,6 +12,67 @@ A high-performance C++ WebSocket client for the Deribit cryptocurrency exchange 
 - Local WebSocket server for client applications
 - Detailed logging system
 
+## System Architecture
+
+The following flow diagram illustrates how the Deribit API Client works:
+
+```
+┌─────────────────┐       ┌───────────────────┐       ┌───────────────────┐
+│                 │       │                   │       │                   │
+│  Local Client   │◄─────►│  Deribit Client   │◄─────►│  Deribit Exchange │
+│  Applications   │       │  (This Library)   │       │      Server       │
+│                 │       │                   │       │                   │
+└─────────────────┘       └───────────────────┘       └───────────────────┘
+                                    │
+                                    │
+                          ┌─────────▼──────────┐
+                          │                    │
+                          │   Message Parser   │
+                          │                    │
+                          └─────────┬──────────┘
+                                    │
+                        ┌───────────┴───────────┐
+                        │                       │
+            ┌───────────▼───────┐   ┌───────────▼───────┐
+            │                   │   │                   │
+            │  Logging System   │   │  Local WebSocket  │
+            │                   │   │      Server       │
+            └───────────────────┘   └───────────────────┘
+```
+
+### Detailed Flow Chart
+
+For a more detailed visualization of the system architecture and data flow, see the diagram below:
+
+![Deribit Client Architecture](assets/flow_chart.png)
+
+### Data Flow
+
+1. **Client Initialization**:
+   - Create a DeribitClient instance
+   - Connect to Deribit WebSocket API
+   - Start the local WebSocket server
+
+2. **Authentication Flow**:
+   - Send authentication request
+   - Receive authentication confirmation
+   - Enable private endpoints
+
+3. **Order Processing Flow**:
+   - Create, modify, or cancel orders
+   - Receive order confirmations
+   - Update local state
+
+4. **Market Data Flow**:
+   - Subscribe to instrument updates
+   - Receive real-time orderbook changes
+   - Process and broadcast to local clients
+
+5. **Position Management Flow**:
+   - Request position information
+   - Process position updates
+   - Track risk and exposure
+
 ## Requirements
 
 - C++17 compiler (GCC 7+, Clang 5+)

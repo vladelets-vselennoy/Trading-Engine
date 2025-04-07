@@ -8,13 +8,17 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/c/all/pre job work/GQTEF/main.cpp" "CMakeFiles/DeribitClient.dir/main.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/main.cpp.o.d"
-  "/mnt/c/all/pre job work/GQTEF/src/deribit_client.cpp" "CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o.d"
-  "/mnt/c/all/pre job work/GQTEF/src/message_parser.cpp" "CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o.d"
+  "/mnt/c/all/pre job work/gqtef/main.cpp" "CMakeFiles/DeribitClient.dir/main.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/main.cpp.o.d"
+  "/mnt/c/all/pre job work/gqtef/src/deribit_client.cpp" "CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/src/deribit_client.cpp.o.d"
+  "/mnt/c/all/pre job work/gqtef/src/message_parser.cpp" "CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o" "gcc" "CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o.d"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+  )
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

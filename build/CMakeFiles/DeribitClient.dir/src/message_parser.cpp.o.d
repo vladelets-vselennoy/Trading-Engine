@@ -1,7 +1,7 @@
 CMakeFiles/DeribitClient.dir/src/message_parser.cpp.o: \
- /mnt/c/all/pre\ job\ work/GQTEF/src/message_parser.cpp \
+ /mnt/c/all/pre\ job\ work/gqtef/src/message_parser.cpp \
  /usr/include/stdc-predef.h \
- /mnt/c/all/pre\ job\ work/GQTEF/include/message_parser.hpp \
+ /mnt/c/all/pre\ job\ work/gqtef/include/message_parser.hpp \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

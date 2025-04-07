@@ -304,8 +304,8 @@ void DeribitClient::modify_order(
     };
 
     send_message(msg);
-    // std::cout << "✏️ Sent modify request for Order ID: " << order_id << "\n";
-    spdlog::info("✏️ Sent modify request for Order ID: {}", order_id);
+    // std::cout << " Sent modify request for Order ID: " << order_id << "\n";
+    spdlog::info("Sent modify request for Order ID: {}", order_id);
 }
 
 void DeribitClient::cancel_order(const std::string& order_id) {
@@ -502,78 +502,7 @@ void DeribitClient::remove_session(std::shared_ptr<websocket::stream<tcp::socket
     sessions_.erase(session);
 }
 
-// void DeribitClient::handle_session(std::shared_ptr<websocket::stream<tcp::socket>> session) {
-//     auto session_id = std::to_string(reinterpret_cast<uintptr_t>(session.get()));
-//     auto buffer = std::make_shared<boost::beast::flat_buffer>();
-    
-//     // Initialize client session
-//     {
-//         std::lock_guard<std::mutex> lock(client_sessions_mutex_);
-//         auto client_session = std::make_shared<ClientSession>();
-//         client_session->socket = session;
-//         client_session->last_active = std::chrono::steady_clock::now();
-//         client_sessions_[session_id] = client_session;
-//     }
-    
-//     session->async_read(
-//         *buffer,
-//         [this, session, buffer, session_id]
-//         (boost::system::error_code ec, [[maybe_unused]] std::size_t bytes_transferred) {
-//             if (ec) {
-//                 remove_client_session(session_id);
-//                 return;
-//             }
 
-//             try {
-//                 // Process the received message
-//                 std::string message = boost::beast::buffers_to_string(buffer->data());
-//                 spdlog::info("Received message from client {}: {}", session_id, message);
-                
-//                 auto json_msg = json::parse(message);
-                
-//                 // Handle subscription request
-//                 if (json_msg.contains("subscribe")) {
-//                     std::string channel = json_msg["subscribe"].get<std::string>();
-//                     add_client_subscription(session_id, channel);
-                    
-//                     // Subscribe to Deribit if not already subscribed
-//                     if (!subscribed_symbols_.count(channel)) {
-//                         subscribe_book(channel);
-//                     }
-                    
-//                     // Send confirmation back to client
-//                     json response = {
-//                         {"status", "subscribed"},
-//                         {"channel", channel}
-//                     };
-//                     session->async_write(
-//                         boost::asio::buffer(response.dump()),
-//                         [](boost::system::error_code ec, [[maybe_unused]] std::size_t) {
-//                             if (ec) {
-//                                 spdlog::error("Failed to send subscription confirmation: {}", ec.message());
-//                             }
-//                         });
-//                 }
-//                 // Handle unsubscribe request
-//                 else if (json_msg.contains("unsubscribe")) {
-//                     std::string channel = json_msg["unsubscribe"].get<std::string>();
-//                     remove_client_subscription(session_id, channel);
-//                 }
-
-//                 update_client_activity(session_id);
-                
-//                 // Clear buffer and continue reading
-//                 buffer->consume(buffer->size());
-//                 handle_session(session);
-//             }
-//             catch (const std::exception& e) {
-//                 spdlog::error("Error processing client message: {}", e.what());
-//                 handle_session(session);
-//             }
-//         });
-// }
-
-// // ...rest of existing code...
 
 
 void DeribitClient::handle_session(std::shared_ptr<websocket::stream<tcp::socket>> session) {
